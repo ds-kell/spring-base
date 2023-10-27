@@ -12,23 +12,27 @@ public class ResponseUtils {
      * Response api
      */
     public ResponseEntity<Response> created() {
-        return new ResponseEntity<>(Response.of("Created", null), HttpStatus.CREATED);
+        return new ResponseEntity<>(Response.of(201, "Created", null), HttpStatus.CREATED);
     }
 
     public ResponseEntity<Response> ok() {
-        return ResponseEntity.ok(Response.of(StringUtils.EMPTY, null));
+        return ResponseEntity.ok(Response.of(201, StringUtils.EMPTY, null));
     }
 
     public ResponseEntity<Response> ok(String msg) {
-        return ResponseEntity.ok(Response.of(msg, null));
+        return ResponseEntity.ok(Response.of(201, msg, null));
     }
 
     public ResponseEntity<Response> ok(Object data) {
-        return ResponseEntity.ok(Response.of("success", data));
+        return ResponseEntity.ok(Response.of(201, "success", data));
     }
 
     public ResponseEntity<Response> ok(String msg, Object data) {
-        return ResponseEntity.ok(Response.of(msg, data));
+        return ResponseEntity.ok(Response.of(201, msg, data));
+    }
+
+    public ResponseEntity<Response> ok(Integer statusCode, String msg, Object data) {
+        return ResponseEntity.ok(Response.of(statusCode, msg, data));
     }
 
     /**

@@ -19,7 +19,7 @@ public class UserController {
         return ResponseUtils.ok(userService.getUserInfo());
     }
 
-    @GetMapping("public/user/test")
+    @GetMapping("private/user/test")
     public String getTest(){
         return "BTT-19-11-2001";
     }

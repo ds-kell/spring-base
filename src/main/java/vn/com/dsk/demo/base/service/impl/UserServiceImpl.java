@@ -21,7 +21,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto getUserInfo() {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println(username);
         return accountRepository.findByUsername(username)
                 .map(user -> modelMapper.map(user, UserDto.class))
                 .orElseThrow(() -> new RuntimeException("Not found user with username: " + username));

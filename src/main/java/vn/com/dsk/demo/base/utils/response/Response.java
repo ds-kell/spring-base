@@ -12,11 +12,15 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response {
 
-    protected String message;
+    protected Integer statusCode = 500;
+
+    protected String message = "success";
+
     protected Object data;
 
-    public static Response of (String message, Object data) {
+    public static Response of (Integer statusCode, String message, Object data) {
         return Response.builder()
+                .statusCode(statusCode)
                 .message(message)
                 .data(data)
                 .build();

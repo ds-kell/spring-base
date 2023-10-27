@@ -8,5 +8,5 @@ import lombok.Data;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
-    private String username = "nguyenttruyen";
+    private String username;
 }
