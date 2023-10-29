@@ -1,12 +1,15 @@
 package vn.com.dsk.demo.feature.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class BookProposalRequest {
-    @NotBlank
+public class PickingOutDetailRequest {
+    @NotNull
     private Long idBook;
-    @NotBlank
+    @NotNull
     private int quantity;
+    @NotNull
+    private int total;
 }

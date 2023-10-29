@@ -14,15 +14,15 @@ public class BookController {
 
     private final BookService bookService;
 
-    @GetMapping("books")
+    @GetMapping("all-book")
     public ResponseEntity<?> getAllBooks() {
         return ResponseUtils.ok(bookService.getAllBooks());
     }
 
     @DeleteMapping("delete/{bookId}")
     public ResponseEntity<?> deleteBook(@PathVariable Long bookId) {
-        bookService.deleteProduct(bookId);
-        return ResponseUtils.ok("Created");
+
+        return ResponseUtils.ok(bookService.deleteProduct(bookId));
     }
 
     @PostMapping("create-book")

@@ -6,12 +6,11 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "tbl_authority")
+@Table(name = "tbl_role")
 public class Authority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    @Column(name = "name")
-    private String name;
+    private String role;
 }

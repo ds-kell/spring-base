@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import vn.com.dsk.demo.base.model.Account;
-import vn.com.dsk.demo.base.repository.AccountRepository;
+import vn.com.dsk.demo.base.model.User;
+import vn.com.dsk.demo.base.repository.UserRepository;
 
 import java.util.Optional;
 import java.util.Set;
@@ -20,28 +20,28 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Account> account = new EmailValidator().isValid(username, null)
-                ? accountRepository.findOneWithAuthoritiesByEmail(username)
-                : accountRepository.findOneWithAuthoritiesByUsername(username);
+        Optional<User> account = new EmailValidator().isValid(username, null)
+                ? userRepository.findOneWithAuthoritiesByEmail(username)
+                : userRepository.findOneWithAuthoritiesByUsername(username);
 
         return account
                 .map(this::createUserSecurity)
                 .orElseThrow(() -> new UsernameNotFoundException("User '" + username + "' is not exist in system"));
     }
 
-    private org.springframework.security.core.userdetails.User createUserSecurity(Account account){
-        Set<GrantedAuthority> securityAuthorities = account
+    private org.springframework.security.core.userdetails.User createUserSecurity(User user){
+        Set<GrantedAuthority> securityAuthorities = user
                 .getAuthorities()
                 .stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+                .map(authority -> new SimpleGrantedAuthority(authority.getRole()))
                 .collect(Collectors.toSet());
 
-        return new org.springframework.security.core.userdetails.User(account.getUsername(), account.getPassword(), securityAuthorities);
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), securityAuthorities);
 
     }
 }

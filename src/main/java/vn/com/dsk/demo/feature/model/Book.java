@@ -10,7 +10,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "import_price")
     private float importPrice;
@@ -20,4 +20,6 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+    @Column(name = "is_active")
+    private Boolean isActive = true;
 }

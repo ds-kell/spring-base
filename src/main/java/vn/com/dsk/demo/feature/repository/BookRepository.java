@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByCategory(Category category);
+
+    List<Book> findAllByIsActive(Boolean isActive);
+
 }

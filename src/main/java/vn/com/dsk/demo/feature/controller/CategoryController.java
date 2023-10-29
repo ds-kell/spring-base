@@ -14,7 +14,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("categories")
+    @GetMapping("all-category")
     public ResponseEntity<?> getAllCategories() {
         return ResponseUtils.ok(categoryService.getAllCategories());
     }
@@ -24,8 +24,8 @@ public class CategoryController {
         return ResponseUtils.ok(categoryService.createCategory(categoryRequest));
     }
 
-    @PostMapping("delete-category")
-    public ResponseEntity<?> createCategory(@RequestBody Long categoryId) {
+    @DeleteMapping("delete-category")
+    public ResponseEntity<?> deleteCategory(@RequestBody Long categoryId) {
         return ResponseUtils.ok(categoryService.deleteCategory(categoryId));
     }
 }

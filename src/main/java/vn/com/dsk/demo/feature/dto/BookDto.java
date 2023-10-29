@@ -9,5 +9,5 @@ public class BookDto {
     private float importPrice;
     private float exportPrice;
     private int quantity;
-    private Category category;
+    private CategoryDto categoryDto;
 }

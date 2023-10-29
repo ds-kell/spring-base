@@ -7,6 +7,7 @@ import vn.com.dsk.demo.base.exception.EntityNotFoundException;
 import vn.com.dsk.demo.feature.dto.BookDto;
 import vn.com.dsk.demo.feature.dto.request.BookRequest;
 import vn.com.dsk.demo.feature.model.Book;
+import vn.com.dsk.demo.feature.model.Category;
 import vn.com.dsk.demo.feature.repository.BookRepository;
 import vn.com.dsk.demo.feature.repository.CategoryRepository;
 import vn.com.dsk.demo.feature.service.BookService;
@@ -26,14 +27,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getAllBooks() {
-        return bookRepository.findAll().stream().map(e -> modelMapper.map(e, BookDto.class)).collect(Collectors.toList());
+        return bookRepository.findAllByIsActive(true).stream().map(e -> modelMapper.map(e, BookDto.class)).collect(Collectors.toList());
     }
 
     @Override
-    public void deleteProduct(Long bookId) {
+    public String deleteProduct(Long bookId) {
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), bookId.toString()));
+        book.setIsActive(false);
         bookRepository.save(book);
+        return "Book have been deleted";
     }
 
     @Override
@@ -43,5 +46,14 @@ public class BookServiceImpl implements BookService {
         category.ifPresent(book::setCategory);
         bookRepository.save(book);
         return "Create book success";
+    }
+
+    @Override
+    public List<BookDto> getBooksByCategory(Long categoryId) {
+        var category = categoryRepository.findById(categoryId).orElseThrow(()
+                -> new EntityNotFoundException(Category.class.getName(), categoryId.toString()));
+        return bookRepository.findAllByCategory(category).stream().map(
+                e -> modelMapper.map(e, BookDto.class)
+        ).collect(Collectors.toList());
     }
 }

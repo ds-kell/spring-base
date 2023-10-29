@@ -18,9 +18,9 @@ import vn.com.dsk.demo.base.dto.request.SignupRequest;
 import vn.com.dsk.demo.base.dto.response.JwtResponse;
 import vn.com.dsk.demo.base.exception.EntityNotFoundException;
 import vn.com.dsk.demo.base.exception.ServiceException;
-import vn.com.dsk.demo.base.model.Account;
+import vn.com.dsk.demo.base.model.User;
 import vn.com.dsk.demo.base.model.Authority;
-import vn.com.dsk.demo.base.repository.AccountRepository;
+import vn.com.dsk.demo.base.repository.UserRepository;
 import vn.com.dsk.demo.base.repository.AuthorityRepository;
 import vn.com.dsk.demo.base.security.jwt.JwtUtils;
 import vn.com.dsk.demo.base.service.AuthService;
@@ -35,7 +35,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
     private final AuthorityRepository authorityRepository;
 
@@ -48,9 +48,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public JwtResponse signup(SignupRequest signupRequest) {
-        if (accountRepository.existsByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail()))
+        if (userRepository.existsByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail()))
             throw new ServiceException("Email or username is existed in system", "err.api.email-username-is-existed");
-        Account user = new Account();
+        User user = new User();
         user.setUsername(signupRequest.getUsername());
         user.setEmail(signupRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
@@ -59,11 +59,11 @@ public class AuthServiceImpl implements AuthService {
         Set<Authority> authorities = new HashSet<>();
 
         if (listAuthority != null && !listAuthority.isEmpty()) {
-            listAuthority.forEach(permission -> authorities.add(authorityRepository.findByName(permission).orElseThrow(() -> new EntityNotFoundException(AuthorityRepository.class.getName(), permission))));
+            listAuthority.forEach(permission -> authorities.add(authorityRepository.findByRole(permission).orElseThrow(() -> new EntityNotFoundException(AuthorityRepository.class.getName(), permission))));
         }
         user.setAuthorities(authorities);
         try {
-            accountRepository.save(user);
+            userRepository.save(user);
             return new JwtResponse(
                     jwtUtils.generateAccessToken(signupRequest.getUsername()),
                     jwtUtils.generateRefreshToken(signupRequest.getUsername()),

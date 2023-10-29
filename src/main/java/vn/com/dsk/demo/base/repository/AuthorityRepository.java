@@ -7,7 +7,5 @@ import java.util.Optional;
 
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
 
-    Optional<Authority> findByName(String name);
-
-
+    Optional<Authority> findByRole(String name);
 }

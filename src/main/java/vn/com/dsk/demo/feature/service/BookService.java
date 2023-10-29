@@ -8,7 +8,10 @@ import java.util.List;
 public interface BookService {
     List<BookDto> getAllBooks();
 
-    void deleteProduct(Long bookId);
+    String deleteProduct(Long bookId);
 
     String createBook(BookRequest bookRequest);
+
+    List<BookDto> getBooksByCategory(Long categoryId);
+
 }

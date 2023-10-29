@@ -3,14 +3,13 @@ package vn.com.dsk.demo.feature.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Data
 @Entity
-@Table(name = "tbl_category")
-public class Category {
+@Data
+@Table(name = "tbl_branch")
+public class Branch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @Column(name = "description", columnDefinition = "text")
-    private String description;
+    private String address;
 }

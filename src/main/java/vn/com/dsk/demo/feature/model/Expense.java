@@ -5,19 +5,23 @@ import lombok.Data;
 import vn.com.dsk.demo.base.model.User;
 
 import java.util.Date;
-import java.util.List;
+
 
 @Data
 @Entity
-@Table(name = "tbl_proposal")
-public class Proposal {
+@Table(name = "tbl_expense")
+public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+//    @ManyToOne
+//    @JoinColumn(name = "id_branch")
+//    private Branch branch;
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name="id_user")
     private User user;
+    private int total;
     private Date date;
-    @OneToMany(mappedBy = "proposal", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    List<ProposalDetail> proposalDetails;
+    @Column(name = "note", columnDefinition = "text")
+    private String note;
 }

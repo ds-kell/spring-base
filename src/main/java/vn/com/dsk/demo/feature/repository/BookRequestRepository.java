@@ -1,7 +1,7 @@
 package vn.com.dsk.demo.feature.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import vn.com.dsk.demo.feature.model.BookProposal;
+import vn.com.dsk.demo.feature.model.ProposalDetail;
 
-public interface BookRequestRepository extends JpaRepository<BookProposal, Long> {
+public interface BookRequestRepository extends JpaRepository<ProposalDetail, Long> {
 }
