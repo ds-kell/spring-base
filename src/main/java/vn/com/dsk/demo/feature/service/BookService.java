@@ -1,6 +1,7 @@
 package vn.com.dsk.demo.feature.service;
 
 import vn.com.dsk.demo.feature.dto.BookDto;
+import vn.com.dsk.demo.feature.dto.UpdateBookRequest;
 import vn.com.dsk.demo.feature.dto.request.BookRequest;
 
 import java.util.List;
@@ -10,8 +11,9 @@ public interface BookService {
 
     String deleteProduct(Long bookId);
 
-    String createBook(BookRequest bookRequest);
+    String createBook(List<BookRequest> bookRequests);
 
     List<BookDto> getBooksByCategory(Long categoryId);
 
+    String updateBook(List<UpdateBookRequest> updateBookRequests);
 }

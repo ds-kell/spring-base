@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import vn.com.dsk.demo.base.exception.EntityNotFoundException;
 import vn.com.dsk.demo.feature.dto.BookDto;
+import vn.com.dsk.demo.feature.dto.UpdateBookRequest;
 import vn.com.dsk.demo.feature.dto.request.BookRequest;
 import vn.com.dsk.demo.feature.model.Book;
 import vn.com.dsk.demo.feature.model.Category;
@@ -40,11 +41,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String createBook(BookRequest bookRequest) {
-        Book book = modelMapper.map(bookRequest, Book.class);
-        var category = categoryRepository.findById(bookRequest.getCategoryId());
-        category.ifPresent(book::setCategory);
-        bookRepository.save(book);
+    public String createBook(List<BookRequest> bookRequests) {
+
+        List<Book> books = bookRequests.stream().map(
+                bookRequest -> {
+                    Book book = modelMapper.map(bookRequest, Book.class);
+                    var category = categoryRepository.findById(bookRequest.getCategoryId());
+                    category.ifPresent(book::setCategory);
+                    return book;
+                }
+        ).toList();
+        bookRepository.saveAll(books);
         return "Create book success";
     }
 
@@ -55,5 +62,20 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAllByCategory(category).stream().map(
                 e -> modelMapper.map(e, BookDto.class)
         ).collect(Collectors.toList());
+    }
+
+    @Override
+    public String updateBook(List<UpdateBookRequest> updateBookRequests) {
+        List<Book> listBooks = updateBookRequests.stream().map(
+                updateBookRequest -> {
+                    var book = modelMapper.map(updateBookRequest, Book.class);
+                    var category = categoryRepository.findById(updateBookRequest.getCategoryId())
+                            .orElseThrow(() -> new EntityNotFoundException(Category.class.getName(), updateBookRequest.getCategoryId().toString()));
+                    book.setCategory(category);
+                    return book;
+                }
+        ).toList();
+        bookRepository.saveAll(listBooks);
+        return "Books have been updated";
     }
 }

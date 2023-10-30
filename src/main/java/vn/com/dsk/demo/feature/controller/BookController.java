@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.com.dsk.demo.base.utils.response.ResponseUtils;
+import vn.com.dsk.demo.feature.dto.UpdateBookRequest;
 import vn.com.dsk.demo.feature.dto.request.BookRequest;
 import vn.com.dsk.demo.feature.service.BookService;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,7 +29,12 @@ public class BookController {
     }
 
     @PostMapping("create-book")
-    public ResponseEntity<?> createBook(@RequestBody BookRequest bookRequest){
-        return ResponseUtils.ok(bookService.createBook(bookRequest));
+    public ResponseEntity<?> createBook(@RequestBody List<BookRequest> bookRequests){
+        return ResponseUtils.ok(bookService.createBook(bookRequests));
+    }
+
+    @PutMapping("update-book")
+    public ResponseEntity<?> updateBook(@RequestBody List<UpdateBookRequest> updateBookRequests){
+        return ResponseUtils.ok(bookService.updateBook(updateBookRequests));
     }
 }

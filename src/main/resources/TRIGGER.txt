@@ -1,0 +1,44 @@
+Trigger 1
+
+CREATE TRIGGER trigger_update_book_detail
+ON [test_db].[dbo].[tbl_picking_in_detail]
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @id_book INT
+    DECLARE @quantity INT
+
+    SELECT @id_book = id_book, @quantity = quantity FROM inserted
+
+    UPDATE [test_db].[dbo].[tbl_book_detail]
+    SET quantity = quantity + @quantity
+    WHERE id = @id_book
+END
+
+Trigger 2
+
+CREATE TRIGGER trigger_update_book_detail_picking_out
+ON [test_db].[dbo].[tbl_picking_out_detail]
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @id_book INT
+    DECLARE @quantity INT
+
+    SELECT @id_book = id_book, @quantity = quantity FROM inserted
+
+    BEGIN TRANSACTION;
+
+    IF EXISTS (SELECT 1 FROM [test_db].[dbo].[tbl_book_detail] WHERE id = @id_book AND quantity >= @quantity)
+    BEGIN
+        UPDATE [test_db].[dbo].[tbl_book_detail]
+        SET quantity = quantity - @quantity
+        WHERE id = @id_book;
+    END
+    ELSE
+    BEGIN
+        ROLLBACK TRANSACTION;
+    END
+
+    COMMIT TRANSACTION;
+END
