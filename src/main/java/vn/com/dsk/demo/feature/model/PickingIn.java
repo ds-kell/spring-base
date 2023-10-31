@@ -18,8 +18,6 @@ public class PickingIn {
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
-    @Column(name = "provide_name")
-    private String provideName;
     private int total;
     private Date date;
     @Column(name = "note", columnDefinition = "text")

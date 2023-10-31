@@ -1,3 +1,4 @@
+Pass V002221:Kell0502
 Trigger 1
 
 CREATE TRIGGER trigger_update_book_detail
