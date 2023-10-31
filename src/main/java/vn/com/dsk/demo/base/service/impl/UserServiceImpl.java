@@ -54,9 +54,7 @@ public class UserServiceImpl implements UserService {
     public JwtResponse createUser(UserRequest userRequest) {
         if (userRepository.existsByUsernameOrEmail(userRequest.getUsername(), userRequest.getEmail()))
             throw new ServiceException("Email or username is existed in system", "err.api.email-username-is-existed");
-        User user = new User();
-        user.setUsername(userRequest.getUsername());
-        user.setEmail(userRequest.getEmail());
+        User user = modelMapper.map(userRequest, User.class);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
         Set<String> listRole = userRequest.getRoles();
