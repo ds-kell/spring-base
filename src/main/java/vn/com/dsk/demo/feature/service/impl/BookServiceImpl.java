@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import vn.com.dsk.demo.base.exception.EntityNotFoundException;
+import vn.com.dsk.demo.feature.dto.BookDetailDto;
 import vn.com.dsk.demo.feature.dto.BookDto;
+import vn.com.dsk.demo.feature.dto.CategoryDto;
 import vn.com.dsk.demo.feature.dto.UpdateBookRequest;
 import vn.com.dsk.demo.feature.dto.request.BookRequest;
 import vn.com.dsk.demo.feature.model.Book;
 import vn.com.dsk.demo.feature.model.Category;
+import vn.com.dsk.demo.feature.repository.BookDetailRepository;
 import vn.com.dsk.demo.feature.repository.BookRepository;
+import vn.com.dsk.demo.feature.repository.BranchRepository;
 import vn.com.dsk.demo.feature.repository.CategoryRepository;
 import vn.com.dsk.demo.feature.service.BookService;
 
@@ -21,6 +25,10 @@ import java.util.stream.Collectors;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+
+    private final BookDetailRepository bookDetailRepository;
+
+    private final BranchRepository branchRepository;
 
     private final CategoryRepository categoryRepository;
 
@@ -77,5 +85,23 @@ public class BookServiceImpl implements BookService {
         ).toList();
         bookRepository.saveAll(listBooks);
         return "Books have been updated";
+    }
+
+    @Override
+    public List<BookDetailDto> getAllBookDetails() {
+        return bookDetailRepository.findAll().stream().map(
+                bookDetail -> {
+                    var bookDetailDto = modelMapper.map(bookDetail, BookDetailDto.class);
+                    var bookDto = modelMapper.map(bookDetail.getBook(), BookDto.class);
+                    bookDto.setCategoryDto(modelMapper.map(bookDetail.getBook().getCategory(), CategoryDto.class));
+                    bookDetailDto.setBookDto(bookDto);
+                    return bookDetailDto;
+                }
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDetailDto> getBookDetailByBranch(Long idBranch) {
+        return null;
     }
 }

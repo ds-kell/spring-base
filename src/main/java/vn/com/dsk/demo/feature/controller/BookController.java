@@ -22,6 +22,11 @@ public class BookController {
         return ResponseUtils.ok(bookService.getAllBooks());
     }
 
+    @GetMapping("all-book-detail")
+    public ResponseEntity<?> getAllBookDetails() {
+        return ResponseUtils.ok(bookService.getAllBookDetails());
+    }
+
     @DeleteMapping("delete/{bookId}")
     public ResponseEntity<?> deleteBook(@PathVariable Long bookId) {
 

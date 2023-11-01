@@ -1,0 +1,4 @@
+SELECT book.id, book.name,
+    (SELECT SUM([quantity]) FROM tbl_book_detail WHERE id_book = book.id) AS total_quantity
+FROM tbl_book AS book
+

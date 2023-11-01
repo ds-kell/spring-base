@@ -7,8 +7,6 @@ import lombok.Data;
 public class BookRequest {
     @NotBlank
     private String name;
-    @NotBlank
-    private int quantity;
     private float importPrice;
     private float exportPrice;
     private Long categoryId;

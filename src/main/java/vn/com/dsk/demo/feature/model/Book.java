@@ -16,7 +16,6 @@ public class Book {
     private float importPrice;
     @Column(name = "export_price")
     private float exportPrice;
-    private int quantity;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
