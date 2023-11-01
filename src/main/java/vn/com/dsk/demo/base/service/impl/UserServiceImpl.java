@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public JwtResponse createUser(UserRequest userRequest) {
         if (userRepository.existsByUsernameOrEmail(userRequest.getUsername(), userRequest.getEmail()))
             throw new ServiceException("Email or username is existed in system", "err.api.email-username-is-existed");

@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import vn.com.dsk.demo.feature.model.Branch;
 
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,7 +33,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "id_role"))
     private Set<Authority> authorities = new HashSet<>();
     @ManyToOne
-    @JoinColumn(name = "id_branch")
+    @JoinColumn(name = "id_branch", nullable = false)
     private Branch branch;
     @Column(name = "full_name")
     private String fullName;
