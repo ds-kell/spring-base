@@ -9,22 +9,22 @@ import vn.com.dsk.demo.feature.service.CategoryService;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/private/category/")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("private/category/all-category")
+    @GetMapping("all-category")
     public ResponseEntity<?> getAllCategories() {
         return ResponseUtils.ok(categoryService.getAllCategories());
     }
 
-    @PostMapping("admin/category/create-category")
+    @PostMapping("create-category")
     public ResponseEntity<?> createCategory(@RequestBody CategoryRequest categoryRequest) {
         return ResponseUtils.ok(categoryService.createCategory(categoryRequest));
     }
 
-    @DeleteMapping("admin/category/delete-category")
+    @DeleteMapping("delete-category")
     public ResponseEntity<?> deleteCategory(@RequestBody Long categoryId) {
         return ResponseUtils.ok(categoryService.deleteCategory(categoryId));
     }
