@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.com.dsk.demo.base.dto.UserDto;
+import vn.com.dsk.demo.base.dto.request.UserInfoRequest;
 import vn.com.dsk.demo.base.dto.request.UserRequest;
 import vn.com.dsk.demo.base.dto.response.JwtResponse;
 import vn.com.dsk.demo.base.exception.EntityNotFoundException;
@@ -20,6 +21,7 @@ import vn.com.dsk.demo.base.repository.AuthorityRepository;
 import vn.com.dsk.demo.base.repository.UserRepository;
 import vn.com.dsk.demo.base.security.jwt.JwtUtils;
 import vn.com.dsk.demo.base.service.UserService;
+import vn.com.dsk.demo.feature.repository.BranchRepository;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,6 +39,8 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final BranchRepository branchRepository;
+
     private final JwtUtils jwtUtils;
 
     private final AuthenticationManager authenticationManager;
@@ -46,7 +50,15 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserInfo() {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByUsername(username)
-                .map(user -> modelMapper.map(user, UserDto.class))
+                .map(user -> {
+                    var userDto = modelMapper.map(user, UserDto.class);
+//                    var authorityDtos = user.getAuthorities().stream().map(
+//                            authority -> {
+//                                return modelMapper.map(authority, AuthorityDto.class);
+//                            }).toList();
+//                    userDto.setAuthorityDtos(authorityDtos);
+                    return userDto;
+                })
                 .orElseThrow(() -> new RuntimeException("Not found user with username: " + username));
     }
 
@@ -78,5 +90,32 @@ public class UserServiceImpl implements UserService {
             log.error("Error saving user to the database", e);
             throw new ServiceException("Failed to add user", "err.api.failed-to-add-user");
         }
+    }
+
+    @Override
+    public UserDto updateInfo(UserInfoRequest userInfoRequest) {
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        var user = userRepository.findByUsername(username).get();
+
+        user.setEmail(!userInfoRequest.getEmail().isEmpty() ? userInfoRequest.getEmail() : user.getEmail());
+        user.setAddress(!userInfoRequest.getAddress().isEmpty() ? userInfoRequest.getAddress() : user.getAddress());
+        user.setFullName(!userInfoRequest.getFullName().isEmpty() ? userInfoRequest.getFullName() : user.getFullName());
+        if (userInfoRequest.getDob() != null) {
+            user.setDob(userInfoRequest.getDob());
+        }
+
+        userRepository.save(user);
+        return modelMapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public String updateWorkplace(Long branchId) {
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        var user = userRepository.findByUsername(username).get();
+        var branch = branchRepository.findById(branchId)
+                .orElseThrow();
+        user.setBranch(branch);
+        userRepository.save(user);
+        return "Workplace of user have been update";
     }
 }
