@@ -91,11 +91,14 @@ public class BookServiceImpl implements BookService {
     public List<BookDetailDto> getAllBookDetails() {
         return bookDetailRepository.findAll().stream().map(
                 bookDetail -> {
-                    var bookDetailDto = modelMapper.map(bookDetail, BookDetailDto.class);
-                    var bookDto = modelMapper.map(bookDetail.getBook(), BookDto.class);
-                    bookDto.setCategoryDto(modelMapper.map(bookDetail.getBook().getCategory(), CategoryDto.class));
-                    bookDetailDto.setBookDto(bookDto);
-                    return bookDetailDto;
+                    if (bookDetail.getBook().getIsActive()) {
+                        var bookDetailDto = modelMapper.map(bookDetail, BookDetailDto.class);
+                        var bookDto = modelMapper.map(bookDetail.getBook(), BookDto.class);
+                        bookDto.setCategoryDto(modelMapper.map(bookDetail.getBook().getCategory(), CategoryDto.class));
+                        bookDetailDto.setBookDto(bookDto);
+                        return bookDetailDto;
+                    }
+                    return null;
                 }
         ).collect(Collectors.toList());
     }

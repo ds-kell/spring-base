@@ -11,24 +11,26 @@ public class ResponseUtils {
     /**
      * Response api
      */
+    private final Integer STATUS_CODE = 200;
+
     public ResponseEntity<Response> created() {
-        return new ResponseEntity<>(Response.of(201, "Created", null), HttpStatus.CREATED);
+        return new ResponseEntity<>(Response.of(STATUS_CODE, "Created", null), HttpStatus.CREATED);
     }
 
     public ResponseEntity<Response> ok() {
-        return ResponseEntity.ok(Response.of(201, StringUtils.EMPTY, null));
+        return ResponseEntity.ok(Response.of(STATUS_CODE, StringUtils.EMPTY, null));
     }
 
     public ResponseEntity<Response> ok(String msg) {
-        return ResponseEntity.ok(Response.of(201, msg, null));
+        return ResponseEntity.ok(Response.of(STATUS_CODE, msg, null));
     }
 
     public ResponseEntity<Response> ok(Object data) {
-        return ResponseEntity.ok(Response.of(201, "success", data));
+        return ResponseEntity.ok(Response.of(STATUS_CODE, "success", data));
     }
 
     public ResponseEntity<Response> ok(String msg, Object data) {
-        return ResponseEntity.ok(Response.of(201, msg, data));
+        return ResponseEntity.ok(Response.of(STATUS_CODE, msg, data));
     }
 
     public ResponseEntity<Response> ok(Integer statusCode, String msg, Object data) {

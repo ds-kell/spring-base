@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import vn.com.dsk.demo.base.utils.response.ResponseUtils;
 import vn.com.dsk.demo.feature.dto.request.BranchRequest;
 import vn.com.dsk.demo.feature.service.BranchService;
-
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/private/branch/")
 public class BranchController {
 

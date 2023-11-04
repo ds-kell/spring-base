@@ -12,13 +12,13 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response {
 
-    protected Integer statusCode = 500;
+    protected Integer statusCode = 200;
 
     protected String message = "success";
 
     protected Object data;
 
-    public static Response of (Integer statusCode, String message, Object data) {
+    public static Response of(Integer statusCode, String message, Object data) {
         return Response.builder()
                 .statusCode(statusCode)
                 .message(message)

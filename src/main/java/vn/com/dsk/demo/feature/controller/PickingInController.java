@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.com.dsk.demo.base.utils.response.ResponseUtils;
-import vn.com.dsk.demo.feature.dto.request.PickingInDetailRequest;
 import vn.com.dsk.demo.feature.dto.request.PickingInRequest;
 import vn.com.dsk.demo.feature.service.PickingInService;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/private/picking-in/")

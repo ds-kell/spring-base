@@ -11,5 +11,4 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addRedirectViewController("", "/swagger-ui/index.html");
     }
-
 }
