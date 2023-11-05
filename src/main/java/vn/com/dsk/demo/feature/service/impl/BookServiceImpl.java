@@ -10,6 +10,7 @@ import vn.com.dsk.demo.feature.dto.CategoryDto;
 import vn.com.dsk.demo.feature.dto.UpdateBookRequest;
 import vn.com.dsk.demo.feature.dto.request.BookRequest;
 import vn.com.dsk.demo.feature.model.Book;
+import vn.com.dsk.demo.feature.model.BookDetail;
 import vn.com.dsk.demo.feature.model.Category;
 import vn.com.dsk.demo.feature.repository.BookDetailRepository;
 import vn.com.dsk.demo.feature.repository.BookRepository;
@@ -104,7 +105,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDetailDto> getBookDetailByBranch(Long idBranch) {
+    public BookDetailDto getBookDetailById(Long bookId) {
+        BookDetail bookDetail = bookDetailRepository.findBookDetailById(bookId);
+        BookDetailDto bookDetailDto = modelMapper.map(bookDetail, BookDetailDto.class);
+        if (bookDetail.getBook().getIsActive()) {
+            var bookDto = modelMapper.map(bookDetail.getBook(), BookDto.class);
+            bookDto.setCategoryDto(modelMapper.map(bookDetail.getBook().getCategory(), CategoryDto.class));
+            bookDetailDto.setBookDto(bookDto);
+        }
+        return bookDetailDto;
+    }
+
+    @Override
+    public List<BookDetailDto> getBookDetailByBranch(Long branchId) {
         return null;
     }
 }

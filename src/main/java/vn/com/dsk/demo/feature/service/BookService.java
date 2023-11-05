@@ -12,7 +12,9 @@ public interface BookService {
 
     List<BookDetailDto> getAllBookDetails();
 
-    List<BookDetailDto> getBookDetailByBranch(Long idBranch);
+    BookDetailDto getBookDetailById(Long bookId);
+
+    List<BookDetailDto> getBookDetailByBranch(Long branchId);
 
     String deleteProduct(Long bookId);
 
