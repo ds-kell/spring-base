@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class AuthorityDto {
-    private Long id;
+    private String id;
     private String role;
 }

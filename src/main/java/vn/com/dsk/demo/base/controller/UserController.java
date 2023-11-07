@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PutMapping("private/user/update-workplace")
-    public ResponseEntity<?> updateInfo(@RequestBody Long branchId) {
+    public ResponseEntity<?> updateInfo(@RequestBody String branchId) {
         return ResponseUtils.ok(userService.updateWorkplace(branchId));
     }
 
@@ -47,11 +47,11 @@ public class UserController {
     }
 
     @GetMapping("private/user/{userId}")
-    public ResponseEntity<?> getUserInfoById(@PathVariable Long userId) {
+    public ResponseEntity<?> getUserInfoById(@PathVariable String userId) {
         return ResponseUtils.ok(userService.getUserInfoById(userId));
     }
     @DeleteMapping("private/user/deactivate/{userId}")
-    public ResponseEntity<?> deactivateUserById(@PathVariable Long userId) {
+    public ResponseEntity<?> deactivateUserById(@PathVariable String userId) {
         return ResponseUtils.ok(userService.deactivateUser(userId));
     }
 

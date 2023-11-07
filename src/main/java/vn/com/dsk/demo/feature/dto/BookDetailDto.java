@@ -5,7 +5,7 @@ import vn.com.dsk.demo.feature.model.Branch;
 
 @Data
 public class BookDetailDto {
-    private Long id;
+    private String id;
     private BookDto bookDto;
     private Branch branch;
     private long quantity;

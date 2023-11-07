@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class BookDto {
-    private Long id;
+    private String id;
     private String name;
     private float importPrice;
     private float exportPrice;

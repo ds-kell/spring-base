@@ -28,12 +28,12 @@ public class BookController {
     }
 
     @GetMapping("{bookId}")
-    public ResponseEntity<?> getBookDetailById(@PathVariable Long bookId) {
+    public ResponseEntity<?> getBookDetailById(@PathVariable String bookId) {
         return ResponseUtils.ok(bookService.getBookDetailById(bookId));
     }
 
     @DeleteMapping("delete/{bookId}")
-    public ResponseEntity<?> deleteBook(@PathVariable Long bookId) {
+    public ResponseEntity<?> deleteBook(@PathVariable String bookId) {
         return ResponseUtils.ok(bookService.deleteProduct(bookId));
     }
 

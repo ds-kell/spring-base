@@ -16,11 +16,11 @@ public interface UserService {
 
     UserDto updateInfo(UserInfoRequest userInfoRequest);
 
-    String updateWorkplace(Long branchId);
+    String updateWorkplace(String branchId);
 
     List<UserDto> getAllUser();
 
-    UserDto getUserInfoById(Long userId);
+    UserDto getUserInfoById(String userId);
 
-    String deactivateUser(Long userId);
+    String deactivateUser(String userId);
 }

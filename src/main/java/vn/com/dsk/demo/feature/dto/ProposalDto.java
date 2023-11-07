@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 @Data
 public class ProposalDto {
-    private Long id;
+    private String id;
     private User user;
     private Date date;
     List<ProposalDetailDto> proposalDetailDtos;

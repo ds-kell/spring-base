@@ -2,14 +2,15 @@ package vn.com.dsk.demo.feature.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.UuidGenerator;
 
 @Data
 @Entity
 @Table(name = "tbl_proposal_detail")
 public class ProposalDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @UuidGenerator
+    private String id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_proposal")
     private Proposal proposal;

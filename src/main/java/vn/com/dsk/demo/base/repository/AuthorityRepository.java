@@ -5,7 +5,7 @@ import vn.com.dsk.demo.base.model.Authority;
 
 import java.util.Optional;
 
-public interface AuthorityRepository extends JpaRepository<Authority, Long> {
+public interface AuthorityRepository extends JpaRepository<Authority, String> {
 
     Optional<Authority> findByRole(String name);
 }

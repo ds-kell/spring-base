@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class PickingOutDetailRequest {
     @NotNull
-    private Long idBook;
+    private String idBook;
     @NotNull
     private int quantity;
     @NotNull

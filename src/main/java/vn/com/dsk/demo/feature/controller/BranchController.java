@@ -9,7 +9,7 @@ import vn.com.dsk.demo.feature.dto.request.BranchRequest;
 import vn.com.dsk.demo.feature.service.BranchService;
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/private/branch/")
+@RequestMapping("/api/public/branch/")
 public class BranchController {
 
     private final BranchService branchService;

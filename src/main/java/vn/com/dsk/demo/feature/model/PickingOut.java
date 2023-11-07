@@ -2,19 +2,20 @@ package vn.com.dsk.demo.feature.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.UuidGenerator;
 import vn.com.dsk.demo.base.model.User;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "tbl_picking_out")
 public class PickingOut {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @SequenceGenerator(name="", sequenceName = "", allocationSize = 1)
-    private Long id;
+    @UuidGenerator
+    private String id;
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 public class PickingOutDto {
-    private Long id;
+    private String id;
     private User user;
     private int total;
     private Date date;

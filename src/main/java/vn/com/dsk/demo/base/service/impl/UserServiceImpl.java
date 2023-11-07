@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,8 +43,6 @@ public class UserServiceImpl implements UserService {
     private final BranchRepository branchRepository;
 
     private final JwtUtils jwtUtils;
-
-    private final AuthenticationManager authenticationManager;
 
     @Override
     @Transactional
@@ -96,7 +93,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto updateInfo(UserInfoRequest userInfoRequest) {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
-        var user = userRepository.findByUsername(username).get();
+        var user = userRepository.findByUsername(username).orElseThrow();
 
         user.setEmail(!userInfoRequest.getEmail().isEmpty() ? userInfoRequest.getEmail() : user.getEmail());
         user.setAddress(!userInfoRequest.getAddress().isEmpty() ? userInfoRequest.getAddress() : user.getAddress());
@@ -111,11 +108,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String updateWorkplace(Long branchId) {
+    public String updateWorkplace(String branchId) {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
-        var user = userRepository.findByUsername(username).get();
-        var branch = branchRepository.findById(branchId)
-                .orElseThrow();
+        var user = userRepository.findByUsername(username).orElseThrow();
+        var branch = branchRepository.findById(branchId).orElseThrow();
         user.setBranch(branch);
         userRepository.save(user);
         return "Workplace of user have been update";
@@ -136,7 +132,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto getUserInfoById(Long userId) {
+    public UserDto getUserInfoById(String userId) {
         return userRepository.findById(userId)
                 .map(user -> {
                     var userDto = modelMapper.map(user, UserDto.class);
@@ -150,7 +146,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String deactivateUser(Long userId) {
+    public String deactivateUser(String userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new RuntimeException("Not found user with username: " + userId));
         user.setIsActive(false);

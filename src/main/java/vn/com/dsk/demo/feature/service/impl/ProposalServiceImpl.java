@@ -41,7 +41,7 @@ public class ProposalServiceImpl implements ProposalService {
         List<ProposalDetail> listProposalDetail = proposalRequest.getListBookRq().stream().map(e -> {
             ProposalDetail proposalDetail = new ProposalDetail();
 
-            var book = bookRepository.findById(e.getIdBook()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), e.getIdBook().toString()));
+            var book = bookRepository.findById(e.getIdBook()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), e.getIdBook()));
 
             proposalDetail.setProposal(proposal);
             proposalDetail.setBook(book);

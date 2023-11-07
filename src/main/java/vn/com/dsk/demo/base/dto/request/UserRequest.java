@@ -22,7 +22,7 @@ public class UserRequest {
     @Size(min = 5, max = 40)
     private String password;
     @NotNull
-    private Long branchId;
+    private String branchId;
     private String fullName;
     private String address;
     private Date dob;

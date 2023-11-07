@@ -12,15 +12,15 @@ public interface BookService {
 
     List<BookDetailDto> getAllBookDetails();
 
-    BookDetailDto getBookDetailById(Long bookId);
+    BookDetailDto getBookDetailById(String bookId);
 
     List<BookDetailDto> getBookDetailByBranch(Long branchId);
 
-    String deleteProduct(Long bookId);
+    String deleteProduct(String bookId);
 
     String createBook(List<BookRequest> bookRequests);
 
-    List<BookDto> getBooksByCategory(Long categoryId);
+    List<BookDto> getBooksByCategory(String categoryId);
 
     String updateBook(List<UpdateBookRequest> updateBookRequests);
 }

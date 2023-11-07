@@ -41,9 +41,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String deleteProduct(Long bookId) {
-        var book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), bookId.toString()));
+    public String deleteProduct(String bookId) {
+        var book = bookRepository.findById(bookId).orElseThrow();
         book.setIsActive(false);
         bookRepository.save(book);
         return "Book have been deleted";
@@ -65,9 +64,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getBooksByCategory(Long categoryId) {
+    public List<BookDto> getBooksByCategory(String categoryId) {
         var category = categoryRepository.findById(categoryId).orElseThrow(()
-                -> new EntityNotFoundException(Category.class.getName(), categoryId.toString()));
+                -> new EntityNotFoundException(Category.class.getName(), categoryId));
         return bookRepository.findAllByCategory(category).stream().map(
                 e -> modelMapper.map(e, BookDto.class)
         ).collect(Collectors.toList());
@@ -105,7 +104,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDetailDto getBookDetailById(Long bookId) {
+    public BookDetailDto getBookDetailById(String bookId) {
         BookDetail bookDetail = bookDetailRepository.findBookDetailById(bookId);
         BookDetailDto bookDetailDto = modelMapper.map(bookDetail, BookDetailDto.class);
         if (bookDetail.getBook().getIsActive()) {

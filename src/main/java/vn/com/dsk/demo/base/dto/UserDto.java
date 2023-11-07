@@ -12,7 +12,7 @@ import java.util.List;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
-    private Long id;
+    private String id;
     private String username;
     private String email;
     private List<AuthorityDto> authorityDtos;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.UuidGenerator;
 import vn.com.dsk.demo.feature.model.Branch;
 
 import java.util.Date;
@@ -15,8 +16,8 @@ import java.util.Set;
 @Table(name= "tbl_user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @UuidGenerator
+    private String id;
     @Column(name="username", nullable = false)
     private String username;
     @Column(name="email", nullable = false)

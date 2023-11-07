@@ -7,7 +7,7 @@ import vn.com.dsk.demo.base.model.User;
 import java.util.Date;
 @Data
 public class ExpenseDto {
-    private Long id;
+    private String id;
     private User user;
     private int total;
     private Date date;
