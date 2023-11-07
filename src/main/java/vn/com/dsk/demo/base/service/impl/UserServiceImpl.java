@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import vn.com.dsk.demo.base.dto.AuthorityDto;
 import vn.com.dsk.demo.base.dto.UserDto;
 import vn.com.dsk.demo.base.dto.request.UserInfoRequest;
 import vn.com.dsk.demo.base.dto.request.UserRequest;
@@ -24,6 +25,7 @@ import vn.com.dsk.demo.base.service.UserService;
 import vn.com.dsk.demo.feature.repository.BranchRepository;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -52,11 +54,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username)
                 .map(user -> {
                     var userDto = modelMapper.map(user, UserDto.class);
-//                    var authorityDtos = user.getAuthorities().stream().map(
-//                            authority -> {
-//                                return modelMapper.map(authority, AuthorityDto.class);
-//                            }).toList();
-//                    userDto.setAuthorityDtos(authorityDtos);
+                    var authorityDtos = user.getAuthorities().stream().map(
+                            authority -> modelMapper.map(authority, AuthorityDto.class)).toList();
+                    userDto.setAuthorityDtos(authorityDtos);
                     return userDto;
                 })
                 .orElseThrow(() -> new RuntimeException("Not found user with username: " + username));
@@ -93,6 +93,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto updateInfo(UserInfoRequest userInfoRequest) {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         var user = userRepository.findByUsername(username).get();
@@ -109,6 +110,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String updateWorkplace(Long branchId) {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         var user = userRepository.findByUsername(username).get();
@@ -117,5 +119,41 @@ public class UserServiceImpl implements UserService {
         user.setBranch(branch);
         userRepository.save(user);
         return "Workplace of user have been update";
+    }
+
+    @Override
+    @Transactional
+    public List<UserDto> getAllUser() {
+        return userRepository.findAllByIsActive(true).stream()
+                .map(user -> {
+                    var userDto = modelMapper.map(user, UserDto.class);
+                    var authorityDtos = user.getAuthorities().stream().map(
+                            authority -> modelMapper.map(authority, AuthorityDto.class)).toList();
+                    userDto.setAuthorityDtos(authorityDtos);
+                    return userDto;
+                }).toList();
+    }
+
+    @Override
+    @Transactional
+    public UserDto getUserInfoById(Long userId) {
+        return userRepository.findById(userId)
+                .map(user -> {
+                    var userDto = modelMapper.map(user, UserDto.class);
+                    var authorityDtos = user.getAuthorities().stream().map(
+                            authority -> modelMapper.map(authority, AuthorityDto.class)).toList();
+                    userDto.setAuthorityDtos(authorityDtos);
+                    return userDto;
+                })
+                .orElseThrow(() -> new RuntimeException("Not found user with id: " + userId));
+    }
+
+    @Override
+    @Transactional
+    public String deactivateUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new RuntimeException("Not found user with username: " + userId));
+        user.setIsActive(false);
+        return "Deactivate user with id " + userId;
     }
 }

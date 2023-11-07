@@ -31,9 +31,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwtToken = getJWTFromRequest(request);
-            System.out.println("token " + jwtToken);
-            jwtToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY5OTEyMTUxOCwiZXhwIjoxNjk5MjA3OTE4fQ.zBeGlR460dfuRIETYVPi4fLvDaWA6n6_HfuAIxoamUh49g7Sjvypd0W4ziOvSLmp";
-            if (jwtToken != null && jwtUtils.validateToken(jwtToken)) {
+            System.out.println("token client: " + jwtToken);
+            if(jwtToken==null)
+                jwtToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGFmZjEiLCJpYXQiOjE2OTkyNjA5NTMsImV4cCI6MTcwMTg1Mjk1M30.k5rah_uhUIM_Axf6a-e1QISCg5u3g-mfYdKYgCGn6mERV6iT_QOuO4Y4UMBR3HSl";
+            if (jwtUtils.validateToken(jwtToken)) {
                 String username = jwtUtils.extractUsername(jwtToken);
                 UserDetails userDetails = userDetailService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication =

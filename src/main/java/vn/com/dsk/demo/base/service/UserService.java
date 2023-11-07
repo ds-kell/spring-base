@@ -6,6 +6,8 @@ import vn.com.dsk.demo.base.dto.request.UserInfoRequest;
 import vn.com.dsk.demo.base.dto.request.UserRequest;
 import vn.com.dsk.demo.base.dto.response.JwtResponse;
 
+import java.util.List;
+
 public interface UserService {
 
     UserDto getUserInfo();
@@ -15,4 +17,10 @@ public interface UserService {
     UserDto updateInfo(UserInfoRequest userInfoRequest);
 
     String updateWorkplace(Long branchId);
+
+    List<UserDto> getAllUser();
+
+    UserDto getUserInfoById(Long userId);
+
+    String deactivateUser(Long userId);
 }

@@ -16,6 +16,11 @@ import vn.com.dsk.demo.base.utils.response.ResponseUtils;
 public class UserController {
     private final UserService userService;
 
+    @GetMapping("private/all-user")
+    public ResponseEntity<?> getAllUser() {
+        return ResponseUtils.ok(userService.getAllUser());
+    }
+
     @GetMapping("private/user/info")
     public ResponseEntity<?> getUserInfo() {
         return ResponseUtils.ok(userService.getUserInfo());
@@ -24,11 +29,6 @@ public class UserController {
     @PutMapping("private/user/update-info")
     public ResponseEntity<?> updateInfo(@RequestBody UserInfoRequest userInfoRequest) {
         return ResponseUtils.ok(userService.updateInfo(userInfoRequest));
-    }
-
-    @GetMapping("private/user/test")
-    public String getTest() {
-        return "BTT-19-11-2001";
     }
 
     @PostMapping("public/user/create-user")
@@ -40,4 +40,19 @@ public class UserController {
     public ResponseEntity<?> updateInfo(@RequestBody Long branchId) {
         return ResponseUtils.ok(userService.updateWorkplace(branchId));
     }
+
+    @GetMapping("admin/user/test")
+    public String getTest() {
+        return "BTT-19-11-2001";
+    }
+
+    @GetMapping("private/user/{userId}")
+    public ResponseEntity<?> getUserInfoById(@PathVariable Long userId) {
+        return ResponseUtils.ok(userService.getUserInfoById(userId));
+    }
+    @DeleteMapping("private/user/deactivate/{userId}")
+    public ResponseEntity<?> deactivateUserById(@PathVariable Long userId) {
+        return ResponseUtils.ok(userService.deactivateUser(userId));
+    }
+
 }
