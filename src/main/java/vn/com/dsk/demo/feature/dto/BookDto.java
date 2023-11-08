@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class BookDto {
-    private String id;
+    private Integer id;
     private String name;
-    private float importPrice;
-    private float exportPrice;
+    private Integer importPrice;
+    private Integer exportPrice;
     private int quantity;
     private CategoryDto categoryDto;
 }

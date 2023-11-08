@@ -11,5 +11,5 @@ public class UpdateBookRequest {
     private float importPrice;
     private float exportPrice;
     private int quantity;
-    private String categoryId;
+    private Integer categoryId;
 }

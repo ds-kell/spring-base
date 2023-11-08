@@ -17,5 +17,5 @@ public class BookDetail {
     @ManyToOne
     @JoinColumn(name="id_branch")
     private Branch branch;
-    private long quantity;
+    private int quantity;
 }

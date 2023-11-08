@@ -24,7 +24,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("delete-category")
-    public ResponseEntity<?> deleteCategory(@RequestBody String categoryId) {
+    public ResponseEntity<?> deleteCategory(@RequestBody Integer categoryId) {
         return ResponseUtils.ok(categoryService.deleteCategory(categoryId));
     }
 }

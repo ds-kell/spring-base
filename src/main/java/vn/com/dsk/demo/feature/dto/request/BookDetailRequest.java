@@ -4,11 +4,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class PickingInDetailRequest {
+public class BookDetailRequest {
     @NotNull
-    private Integer idBook;
+    private Integer bookId;
+    @NotNull
+    private Integer branchId;
     @NotNull
     private int quantity;
-    @NotNull
-    private int total;
 }

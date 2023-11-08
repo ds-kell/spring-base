@@ -5,6 +5,6 @@ import vn.com.dsk.demo.feature.model.Category;
 
 import java.util.Optional;
 
-public interface CategoryRepository extends JpaRepository<Category, String> {
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Optional<Category> findByName(String name);
 }

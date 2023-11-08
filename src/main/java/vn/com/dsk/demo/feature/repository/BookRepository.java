@@ -6,7 +6,7 @@ import vn.com.dsk.demo.feature.model.Category;
 
 import java.util.List;
 
-public interface BookRepository extends JpaRepository<Book, String> {
+public interface BookRepository extends JpaRepository<Book, Integer> {
     List<Book> findAllByCategory(Category category);
 
     List<Book> findAllByIsActive(Boolean isActive);

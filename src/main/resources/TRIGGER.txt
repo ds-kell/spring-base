@@ -2,7 +2,7 @@ Pass V002221:Kell0502
 Trigger 1
 
 CREATE TRIGGER trigger_update_book_detail
-ON [test_db].[dbo].[tbl_picking_in_detail]
+ON [bs_db].[dbo].[tbl_picking_in_detail]
 AFTER INSERT
 AS
 BEGIN
@@ -11,15 +11,17 @@ BEGIN
 
     SELECT @id_book = id_book, @quantity = quantity FROM inserted
 
-    UPDATE [test_db].[dbo].[tbl_book_detail]
+    UPDATE [bs_db].[dbo].[tbl_book_detail]
     SET quantity = quantity + @quantity
-    WHERE id = @id_book
+    WHERE id_book = @id_book
 END
+
 
 Trigger 2
 
+
 CREATE TRIGGER trigger_update_book_detail_picking_out
-ON [test_db].[dbo].[tbl_picking_out_detail]
+ON [bs_db].[dbo].[tbl_picking_out_detail]
 AFTER INSERT
 AS
 BEGIN
@@ -30,11 +32,11 @@ BEGIN
 
     BEGIN TRANSACTION;
 
-    IF EXISTS (SELECT 1 FROM [test_db].[dbo].[tbl_book_detail] WHERE id = @id_book AND quantity >= @quantity)
+    IF EXISTS (SELECT 1 FROM [bs_db].[dbo].[tbl_book_detail] WHERE id = @id_book AND quantity >= @quantity)
     BEGIN
-        UPDATE [test_db].[dbo].[tbl_book_detail]
+        UPDATE [bs_db].[dbo].[tbl_book_detail]
         SET quantity = quantity - @quantity
-        WHERE id = @id_book;
+        WHERE id_book = @id_book;
     END
     ELSE
     BEGIN

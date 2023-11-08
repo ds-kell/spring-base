@@ -16,7 +16,7 @@ public interface UserService {
 
     UserDto updateInfo(UserInfoRequest userInfoRequest);
 
-    String updateWorkplace(String branchId);
+    String updateWorkplace(Integer branchId);
 
     List<UserDto> getAllUser();
 

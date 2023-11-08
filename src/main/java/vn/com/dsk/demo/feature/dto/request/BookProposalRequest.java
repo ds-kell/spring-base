@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class BookProposalRequest {
     @NotBlank
-    private String idBook;
+    private Integer idBook;
     @NotBlank
     private int quantity;
 }

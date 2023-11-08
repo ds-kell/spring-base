@@ -42,7 +42,7 @@ public class PickingInServiceImpl implements PickingInService {
         List<PickingInDetail> pickingInDetails = pickingInRequest.getPickingInDetailRequests().stream().map(e -> {
             PickingInDetail pickingInDetail = new PickingInDetail();
 
-            var book = bookRepository.findById(e.getIdBook()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), e.getIdBook()));
+            var book = bookRepository.findById(e.getIdBook()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), e.getIdBook().toString()));
 
             pickingInDetail.setPickingIn(pickingIn);
             pickingInDetail.setBook(book);

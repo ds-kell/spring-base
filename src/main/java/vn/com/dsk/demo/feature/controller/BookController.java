@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.com.dsk.demo.base.utils.response.ResponseUtils;
 import vn.com.dsk.demo.feature.dto.UpdateBookRequest;
+import vn.com.dsk.demo.feature.dto.request.BookDetailRequest;
 import vn.com.dsk.demo.feature.dto.request.BookRequest;
 import vn.com.dsk.demo.feature.service.BookService;
 
@@ -33,14 +34,20 @@ public class BookController {
     }
 
     @DeleteMapping("delete/{bookId}")
-    public ResponseEntity<?> deleteBook(@PathVariable String bookId) {
-        return ResponseUtils.ok(bookService.deleteProduct(bookId));
+    public ResponseEntity<?> deleteBook(@PathVariable Integer bookId) {
+        return ResponseUtils.ok(bookService.deleteBook(bookId));
     }
 
     @PostMapping("create-book")
     public ResponseEntity<?> createBook(@RequestBody List<BookRequest> bookRequests) {
         return ResponseUtils.ok(bookService.createBook(bookRequests));
     }
+
+    @PostMapping("create-book-detail")
+    public ResponseEntity<?> createBookDetail(@RequestBody List<BookDetailRequest> bookDetailRequests) {
+        return ResponseUtils.ok(bookService.createBookDetail(bookDetailRequests));
+    }
+
 
     @PutMapping("update-book")
     public ResponseEntity<?> updateBook(@RequestBody List<UpdateBookRequest> updateBookRequests) {

@@ -40,14 +40,13 @@ public class ProposalServiceImpl implements ProposalService {
         proposal.setUser(user);
         List<ProposalDetail> listProposalDetail = proposalRequest.getListBookRq().stream().map(e -> {
             ProposalDetail proposalDetail = new ProposalDetail();
-
-            var book = bookRepository.findById(e.getIdBook()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), e.getIdBook()));
-
+            var book = bookRepository.findById(e.getIdBook()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), e.getIdBook().toString()));
             proposalDetail.setProposal(proposal);
             proposalDetail.setBook(book);
             proposalDetail.setQuantity(e.getQuantity());
             return proposalDetail;
         }).toList();
+        proposal.setDate(proposalRequest.getDate());
         proposal.setProposalDetails(listProposalDetail);
         proposalRepository.save(proposal);
         return "Proposal have been created";

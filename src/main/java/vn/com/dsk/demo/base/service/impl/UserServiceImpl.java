@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String updateWorkplace(String branchId) {
+    public String updateWorkplace(Integer branchId) {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         var user = userRepository.findByUsername(username).orElseThrow();
         var branch = branchRepository.findById(branchId).orElseThrow();

@@ -3,6 +3,7 @@ package vn.com.dsk.demo.feature.service;
 import vn.com.dsk.demo.feature.dto.BookDetailDto;
 import vn.com.dsk.demo.feature.dto.BookDto;
 import vn.com.dsk.demo.feature.dto.UpdateBookRequest;
+import vn.com.dsk.demo.feature.dto.request.BookDetailRequest;
 import vn.com.dsk.demo.feature.dto.request.BookRequest;
 
 import java.util.List;
@@ -14,13 +15,15 @@ public interface BookService {
 
     BookDetailDto getBookDetailById(String bookId);
 
-    List<BookDetailDto> getBookDetailByBranch(Long branchId);
+    List<BookDetailDto> getBookDetailByBranch(Integer branchId);
 
-    String deleteProduct(String bookId);
+    String deleteBook(Integer bookId);
 
     String createBook(List<BookRequest> bookRequests);
 
-    List<BookDto> getBooksByCategory(String categoryId);
+    String createBookDetail(List<BookDetailRequest> bookDetailRequests);
+
+    List<BookDto> getBooksByCategory(Integer categoryId);
 
     String updateBook(List<UpdateBookRequest> updateBookRequests);
 }

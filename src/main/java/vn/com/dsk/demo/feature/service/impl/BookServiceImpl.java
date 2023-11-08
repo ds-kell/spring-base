@@ -8,9 +8,11 @@ import vn.com.dsk.demo.feature.dto.BookDetailDto;
 import vn.com.dsk.demo.feature.dto.BookDto;
 import vn.com.dsk.demo.feature.dto.CategoryDto;
 import vn.com.dsk.demo.feature.dto.UpdateBookRequest;
+import vn.com.dsk.demo.feature.dto.request.BookDetailRequest;
 import vn.com.dsk.demo.feature.dto.request.BookRequest;
 import vn.com.dsk.demo.feature.model.Book;
 import vn.com.dsk.demo.feature.model.BookDetail;
+import vn.com.dsk.demo.feature.model.Branch;
 import vn.com.dsk.demo.feature.model.Category;
 import vn.com.dsk.demo.feature.repository.BookDetailRepository;
 import vn.com.dsk.demo.feature.repository.BookRepository;
@@ -41,7 +43,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String deleteProduct(String bookId) {
+    public String deleteBook(Integer bookId) {
         var book = bookRepository.findById(bookId).orElseThrow();
         book.setIsActive(false);
         bookRepository.save(book);
@@ -64,9 +66,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getBooksByCategory(String categoryId) {
+    public List<BookDto> getBooksByCategory(Integer categoryId) {
         var category = categoryRepository.findById(categoryId).orElseThrow(()
-                -> new EntityNotFoundException(Category.class.getName(), categoryId));
+                -> new EntityNotFoundException(Category.class.getName(), categoryId.toString()));
         return bookRepository.findAllByCategory(category).stream().map(
                 e -> modelMapper.map(e, BookDto.class)
         ).collect(Collectors.toList());
@@ -116,7 +118,22 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDetailDto> getBookDetailByBranch(Long branchId) {
+    public List<BookDetailDto> getBookDetailByBranch(Integer branchId) {
         return null;
+    }
+
+    @Override
+    public String createBookDetail(List<BookDetailRequest> bookDetailRequests) {
+        List<BookDetail> bookDetails = bookDetailRequests.stream().map(
+                bookDetailRequest -> {
+                    BookDetail bookDetail = new BookDetail();
+                    bookDetail.setQuantity(bookDetailRequest.getQuantity());
+                    bookDetail.setBook(bookRepository.findById(bookDetailRequest.getBookId()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), bookDetailRequest.getBookId().toString())));
+                    bookDetail.setBranch(branchRepository.findById(bookDetailRequest.getBranchId()).orElseThrow(() -> new EntityNotFoundException(Branch.class.getName(), bookDetailRequest.getBranchId().toString())));
+                    return bookDetail;
+                }
+        ).toList();
+        bookDetailRepository.saveAll(bookDetails);
+        return "Book detail have been created";
     }
 }

@@ -2,23 +2,20 @@ package vn.com.dsk.demo.feature.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.UuidGenerator;
-
-import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "tbl_book")
 public class Book {
     @Id
-    @UuidGenerator
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "import_price")
-    private float importPrice;
+    private int importPrice;
     @Column(name = "export_price")
-    private float exportPrice;
+    private int exportPrice;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

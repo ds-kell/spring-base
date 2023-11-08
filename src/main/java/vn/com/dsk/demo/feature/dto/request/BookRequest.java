@@ -9,5 +9,5 @@ public class BookRequest {
     private String name;
     private float importPrice;
     private float exportPrice;
-    private String categoryId;
+    private Integer categoryId;
 }

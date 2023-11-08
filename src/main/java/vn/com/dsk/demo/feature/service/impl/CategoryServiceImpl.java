@@ -45,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public String deleteCategory(String categoryId) {
+    public String deleteCategory(Integer categoryId) {
         var category = categoryRepository.findById(categoryId).orElseThrow(()
                 -> new EntityNotFoundException(Category.class.getName(), categoryId.toString()));
         if (!bookRepository.findAllByCategory(category).isEmpty()) {

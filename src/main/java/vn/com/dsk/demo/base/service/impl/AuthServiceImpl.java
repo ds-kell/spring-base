@@ -18,10 +18,10 @@ import vn.com.dsk.demo.base.dto.request.SignupRequest;
 import vn.com.dsk.demo.base.dto.response.JwtResponse;
 import vn.com.dsk.demo.base.exception.EntityNotFoundException;
 import vn.com.dsk.demo.base.exception.ServiceException;
-import vn.com.dsk.demo.base.model.User;
 import vn.com.dsk.demo.base.model.Authority;
-import vn.com.dsk.demo.base.repository.UserRepository;
+import vn.com.dsk.demo.base.model.User;
 import vn.com.dsk.demo.base.repository.AuthorityRepository;
+import vn.com.dsk.demo.base.repository.UserRepository;
 import vn.com.dsk.demo.base.security.jwt.JwtUtils;
 import vn.com.dsk.demo.base.service.AuthService;
 
@@ -56,6 +56,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
 
         Set<String> listAuthority = signupRequest.getAuthorities();
+
         Set<Authority> authorities = new HashSet<>();
 
         if (listAuthority != null && !listAuthority.isEmpty()) {

@@ -44,8 +44,7 @@ public class PickingOutServiceImpl implements PickingOutService {
         List<PickingOutDetail> pickingOutDetails = pickingOutRequest.getPickingOutDetailRequests().stream().map(e -> {
             PickingOutDetail pickingOutDetail = new PickingOutDetail();
 
-            var book = bookRepository.findById(e.getIdBook()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), e.getIdBook()));
-
+            var book = bookRepository.findById(e.getIdBook()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), e.getIdBook().toString()));
             pickingOutDetail.setPickingOut(pickingOut);
             pickingOutDetail.setBook(book);
             pickingOutDetail.setQuantity(e.getQuantity());

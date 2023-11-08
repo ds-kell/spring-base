@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PutMapping("private/user/update-workplace")
-    public ResponseEntity<?> updateInfo(@RequestBody String branchId) {
+    public ResponseEntity<?> updateInfo(@RequestBody Integer branchId) {
         return ResponseUtils.ok(userService.updateWorkplace(branchId));
     }
 
