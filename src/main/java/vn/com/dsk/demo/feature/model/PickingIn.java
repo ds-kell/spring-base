@@ -18,6 +18,9 @@ public class PickingIn {
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "id_branch")
+    private Branch branch;
     private int total;
     private Date date;
     @Column(name = "note", columnDefinition = "text")

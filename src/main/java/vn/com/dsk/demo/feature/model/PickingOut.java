@@ -7,7 +7,6 @@ import vn.com.dsk.demo.base.model.User;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -19,6 +18,9 @@ public class PickingOut {
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "id_branch")
+    private Branch branch;
     private int total;
     private Date date;
     @Column(name = "note", columnDefinition = "text")

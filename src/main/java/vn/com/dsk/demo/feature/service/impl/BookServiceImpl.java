@@ -20,6 +20,7 @@ import vn.com.dsk.demo.feature.repository.BranchRepository;
 import vn.com.dsk.demo.feature.repository.CategoryRepository;
 import vn.com.dsk.demo.feature.service.BookService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -124,15 +125,21 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public String createBookDetail(List<BookDetailRequest> bookDetailRequests) {
-        List<BookDetail> bookDetails = bookDetailRequests.stream().map(
+        List<BookDetail> bookDetails = new ArrayList<>();
+        bookDetailRequests.forEach(
                 bookDetailRequest -> {
-                    BookDetail bookDetail = new BookDetail();
-                    bookDetail.setQuantity(bookDetailRequest.getQuantity());
-                    bookDetail.setBook(bookRepository.findById(bookDetailRequest.getBookId()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), bookDetailRequest.getBookId().toString())));
-                    bookDetail.setBranch(branchRepository.findById(bookDetailRequest.getBranchId()).orElseThrow(() -> new EntityNotFoundException(Branch.class.getName(), bookDetailRequest.getBranchId().toString())));
-                    return bookDetail;
+                    var bookDetail = bookDetailRepository.findBookDetailByBookIdAndBranchId(bookDetailRequest.getBookId(), bookDetailRequest.getBranchId());
+                    if (bookDetail == null) {
+                        bookDetail = new BookDetail();
+                        bookDetail.setQuantity(bookDetailRequest.getQuantity());
+                        bookDetail.setBook(bookRepository.findById(bookDetailRequest.getBookId()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), bookDetailRequest.getBookId().toString())));
+                        bookDetail.setBranch(branchRepository.findById(bookDetailRequest.getBranchId()).orElseThrow(() -> new EntityNotFoundException(Branch.class.getName(), bookDetailRequest.getBranchId().toString())));
+                    }else{
+                        bookDetail.setQuantity(bookDetail.getQuantity() + bookDetailRequest.getQuantity());
+                    }
+                    bookDetails.add(bookDetail);
                 }
-        ).toList();
+        );
         bookDetailRepository.saveAll(bookDetails);
         return "Book detail have been created";
     }

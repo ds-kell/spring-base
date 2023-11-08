@@ -8,7 +8,8 @@ import java.util.List;
 
 @Data
 public class PickingInRequest {
-    private String provideName;
+    @NotNull
+    private Integer branchId;
     @NotNull
     private int total;
     @NotNull

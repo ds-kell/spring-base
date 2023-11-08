@@ -1,7 +1,14 @@
 Pass V002221:Kell0502
 Trigger 1
 
-CREATE TRIGGER trigger_update_book_detail
+USE [bs_db]
+GO
+/****** Object:  Trigger [dbo].[trigger_update_book_detail]    Script Date: 11/8/2023 5:38:23 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER TRIGGER [dbo].[trigger_update_book_detail]
 ON [bs_db].[dbo].[tbl_picking_in_detail]
 AFTER INSERT
 AS
@@ -16,32 +23,72 @@ BEGIN
     WHERE id_book = @id_book
 END
 
-
 Trigger 2
 
-
-CREATE TRIGGER trigger_update_book_detail_picking_out
+USE [bs_db]
+GO
+/****** Object:  Trigger [dbo].[trigger_update_book_detail_picking_out]    Script Date: 11/8/2023 5:38:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER TRIGGER [dbo].[trigger_update_book_detail_picking_out]
 ON [bs_db].[dbo].[tbl_picking_out_detail]
 AFTER INSERT
 AS
 BEGIN
-    DECLARE @id_book INT
-    DECLARE @quantity INT
+		DECLARE @id_book INT
+		DECLARE @quantity INT
 
-    SELECT @id_book = id_book, @quantity = quantity FROM inserted
+		SELECT @id_book = id_book, @quantity = quantity FROM inserted
 
-    BEGIN TRANSACTION;
+		BEGIN TRANSACTION;
 
-    IF EXISTS (SELECT 1 FROM [bs_db].[dbo].[tbl_book_detail] WHERE id = @id_book AND quantity >= @quantity)
+    IF EXISTS (SELECT 1 FROM [bs_db].[dbo].[tbl_book_detail] WHERE id_book = @id_book AND quantity >= @quantity)
+		BEGIN
+			UPDATE [bs_db].[dbo].[tbl_book_detail]
+			SET quantity = quantity - @quantity
+			WHERE id_book = @id_book;
+		END
+    ELSE
+		BEGIN
+			PRINT N'Invalid data'
+			ROLLBACK TRANSACTION;
+		END
+		COMMIT TRANSACTION;
+END
+
+Trigger 3
+
+USE [bs_db]
+GO
+/****** Object:  Trigger [dbo].[trg_CheckAndUpdateBookDetail]    Script Date: 11/8/2023 5:34:35 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER TRIGGER [dbo].[trg_CheckAndUpdateBookDetail]
+ON [bs_db].[dbo].[tbl_book_detail]
+FOR INSERT
+AS
+BEGIN
+    DECLARE @id_book INT, @id_branch INT
+
+    SELECT @id_book = i.id_book, @id_branch = i.id_branch
+    FROM Inserted i
+
+    IF EXISTS (SELECT 1 FROM [bs_db].[dbo].[tbl_book_detail] bd
+               WHERE bd.id_book = @id_book AND bd.id_branch = @id_branch)
     BEGIN
-        UPDATE [bs_db].[dbo].[tbl_book_detail]
-        SET quantity = quantity - @quantity
-        WHERE id_book = @id_book;
+        UPDATE bd
+        SET bd.quantity = bd.quantity + i.quantity
+        FROM Inserted i
+        INNER JOIN [bs_db].[dbo].[tbl_book_detail] bd ON bd.id_book = i.id_book AND bd.id_branch = i.id_branch
     END
     ELSE
     BEGIN
-        ROLLBACK TRANSACTION;
+        INSERT INTO [bs_db].[dbo].[tbl_book_detail] (id, quantity, id_book, id_branch)
+        SELECT id, quantity, id_book, id_branch
+        FROM Inserted
     END
-
-    COMMIT TRANSACTION;
-END
+END;

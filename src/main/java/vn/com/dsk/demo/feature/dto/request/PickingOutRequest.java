@@ -1,17 +1,16 @@
 package vn.com.dsk.demo.feature.dto.request;
 
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import vn.com.dsk.demo.feature.model.PickingOutDetail;
-
 
 import java.util.Date;
 import java.util.List;
 
 @Data
 public class PickingOutRequest {
+    @NotNull
+    private Integer branchId;
     private String customerName;
     private String customerPhone;
     private String customerEmail;

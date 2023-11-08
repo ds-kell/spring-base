@@ -11,6 +11,8 @@ import vn.com.dsk.demo.base.utils.response.ErrorResponse;
 import vn.com.dsk.demo.base.utils.response.Response;
 import vn.com.dsk.demo.base.utils.response.ResponseUtils;
 
+import java.sql.SQLException;
+
 @Slf4j
 @ControllerAdvice
 public class ExceptionControllerAdvice {
@@ -20,6 +22,14 @@ public class ExceptionControllerAdvice {
         log.error("Unexpected Exception", e);
         String errKey = "err.sys.unexpected-exception";
         String errMsg = "Unknown error";
+        return ResponseUtils.internalErr(ErrorResponse.of(errKey, errMsg));
+    }
+
+    @ExceptionHandler({SQLException.class})
+    public ResponseEntity<Response> sqlErrorHandler(Exception e) {
+        log.error("Unexpected Exception", e);
+        String errKey = "err.sys.sql-exception";
+        String errMsg = "Invalid data";
         return ResponseUtils.internalErr(ErrorResponse.of(errKey, errMsg));
     }
 
