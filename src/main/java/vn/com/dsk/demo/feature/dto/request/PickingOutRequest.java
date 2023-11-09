@@ -9,8 +9,6 @@ import java.util.List;
 
 @Data
 public class PickingOutRequest {
-    @NotNull
-    private Integer branchId;
     private String customerName;
     private String customerPhone;
     private String customerEmail;

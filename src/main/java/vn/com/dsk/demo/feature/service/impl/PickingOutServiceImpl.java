@@ -14,7 +14,6 @@ import vn.com.dsk.demo.feature.dto.PickingOutDetailDto;
 import vn.com.dsk.demo.feature.dto.PickingOutDto;
 import vn.com.dsk.demo.feature.dto.request.PickingOutRequest;
 import vn.com.dsk.demo.feature.model.Book;
-import vn.com.dsk.demo.feature.model.Branch;
 import vn.com.dsk.demo.feature.model.PickingOut;
 import vn.com.dsk.demo.feature.model.PickingOutDetail;
 import vn.com.dsk.demo.feature.repository.BookRepository;
@@ -44,8 +43,8 @@ public class PickingOutServiceImpl implements PickingOutService {
     @Transactional
     public String createPickingOut(PickingOutRequest pickingOutRequest) {
         PickingOut pickingOut = modelMapper.map(pickingOutRequest, PickingOut.class);
-        var branch = branchRepository.findById(pickingOutRequest.getBranchId()).orElseThrow(() -> new EntityNotFoundException(Branch.class.getName(), pickingOutRequest.getBranchId().toString()));
-        pickingOut.setBranch(branch);
+        var user = getCurrentUser();
+        pickingOut.setBranch(user.getBranch());
         List<PickingOutDetail> pickingOutDetails = pickingOutRequest.getPickingOutDetailRequests().stream().map(e -> {
             PickingOutDetail pickingOutDetail = new PickingOutDetail();
             var book = bookRepository.findById(e.getIdBook()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), e.getIdBook().toString()));

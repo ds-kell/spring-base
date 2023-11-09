@@ -14,7 +14,6 @@ import vn.com.dsk.demo.feature.dto.PickingInDetailDto;
 import vn.com.dsk.demo.feature.dto.PickingInDto;
 import vn.com.dsk.demo.feature.dto.request.PickingInRequest;
 import vn.com.dsk.demo.feature.model.Book;
-import vn.com.dsk.demo.feature.model.Branch;
 import vn.com.dsk.demo.feature.model.PickingIn;
 import vn.com.dsk.demo.feature.model.PickingInDetail;
 import vn.com.dsk.demo.feature.repository.BookRepository;
@@ -43,8 +42,8 @@ public class PickingInServiceImpl implements PickingInService {
     @Override
     public String createPickingIn(PickingInRequest pickingInRequest) {
         PickingIn pickingIn = modelMapper.map(pickingInRequest, PickingIn.class);
-        var branch = branchRepository.findById(pickingInRequest.getBranchId()).orElseThrow(() -> new EntityNotFoundException(Branch.class.getName(), pickingInRequest.getBranchId().toString()));
-        pickingIn.setBranch(branch);
+        var user = getCurrentUser();
+        pickingIn.setBranch(user.getBranch());
         List<PickingInDetail> pickingInDetails = pickingInRequest.getPickingInDetailRequests().stream().map(e -> {
             PickingInDetail pickingInDetail = new PickingInDetail();
 

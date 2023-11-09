@@ -16,16 +16,13 @@ public class PickingOut {
     @UuidGenerator
     private String id;
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_user", nullable = false)
     private User user;
     @ManyToOne
-    @JoinColumn(name = "id_branch")
+    @JoinColumn(name = "id_branch", nullable = false)
     private Branch branch;
-    private int total;
     private Date date;
-    @Column(name = "note", columnDefinition = "text")
-    private String note;
-    @Column(name = "customer_name")
+    @Column(name = "customer_name", columnDefinition = "nvarchar(255)")
     private String customerName;
     @Column(name = "customer_phone")
     private String customerPhone;
@@ -33,4 +30,7 @@ public class PickingOut {
     private String customerEmail;
     @OneToMany(mappedBy = "pickingOut", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<PickingOutDetail> pickingOutDetails;
+    private int total;
+    @Column(name = "note", columnDefinition = "nvarchar(255)")
+    private String note;
 }

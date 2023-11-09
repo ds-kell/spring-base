@@ -12,10 +12,10 @@ public class BookDetail {
     @UuidGenerator
     private String id;
     @ManyToOne
-    @JoinColumn(name = "id_book", unique = true)
+    @JoinColumn(name = "id_book", unique = true, nullable = false)
     private Book book;
     @ManyToOne
-    @JoinColumn(name="id_branch", unique = true)
+    @JoinColumn(name="id_branch", unique = true, nullable = false)
     private Branch branch;
     private int quantity;
 }

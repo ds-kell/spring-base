@@ -7,7 +7,6 @@ import vn.com.dsk.demo.base.model.User;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -17,8 +16,11 @@ public class Proposal {
     @UuidGenerator
     private String id;
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_user", nullable = false)
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "id_branch",nullable = false)
+    private Branch branch;
     private Date date;
     @OneToMany(mappedBy = "proposal", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<ProposalDetail> proposalDetails;

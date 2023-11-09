@@ -16,14 +16,14 @@ public class PickingIn {
     @UuidGenerator
     private String id;
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_user", nullable = false)
     private User user;
     @ManyToOne
-    @JoinColumn(name = "id_branch")
+    @JoinColumn(name = "id_branch", nullable = false)
     private Branch branch;
     private int total;
     private Date date;
-    @Column(name = "note", columnDefinition = "text")
+    @Column(name = "note", columnDefinition = "nvarchar(255)")
     private String note;
     @OneToMany(mappedBy = "pickingIn", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<PickingInDetail> pickingInDetails;

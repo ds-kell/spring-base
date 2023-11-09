@@ -9,8 +9,6 @@ import java.util.List;
 @Data
 public class PickingInRequest {
     @NotNull
-    private Integer branchId;
-    @NotNull
     private int total;
     @NotNull
     private Date date;

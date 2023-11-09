@@ -36,9 +36,9 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "id_branch", nullable = false)
     private Branch branch;
-    @Column(name = "full_name")
+    @Column(name = "full_name", columnDefinition = "nvarchar(255)")
     private String fullName;
-    @Column(name = "address")
+    @Column(name = "address", columnDefinition = "nvarchar(255)")
     private String address;
     @Column(name= "dob")
     private Date dob;

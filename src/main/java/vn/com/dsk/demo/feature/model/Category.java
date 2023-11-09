@@ -10,7 +10,8 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "name", columnDefinition = "nvarchar(255)")
     private String name;
-    @Column(name = "description", columnDefinition = "text")
+    @Column(name = "description", columnDefinition = "nvarchar(255)")
     private String description;
 }

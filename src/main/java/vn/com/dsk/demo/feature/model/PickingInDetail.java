@@ -12,10 +12,10 @@ public class PickingInDetail {
     @UuidGenerator
     private String id;
     @ManyToOne
-    @JoinColumn(name="id_picking_in")
+    @JoinColumn(name="id_picking_in", nullable = false)
     private PickingIn pickingIn;
     @ManyToOne
-    @JoinColumn(name="id_book")
+    @JoinColumn(name="id_book", nullable = false)
     private Book book;
     private int quantity;
     private int total;

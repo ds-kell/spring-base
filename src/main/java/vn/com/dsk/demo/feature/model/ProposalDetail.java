@@ -12,10 +12,10 @@ public class ProposalDetail {
     @UuidGenerator
     private String id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_proposal")
+    @JoinColumn(name = "id_proposal", nullable = false)
     private Proposal proposal;
     @ManyToOne
-    @JoinColumn(name = "id_book")
+    @JoinColumn(name = "id_book", nullable = false)
     private Book book;
     @Column(name = "quantity")
     private Integer quantity;

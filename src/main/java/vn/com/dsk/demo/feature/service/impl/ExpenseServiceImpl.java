@@ -33,6 +33,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public String createExpense(ExpenseRequest expenseRequest) {
         Expense expense = modelMapper.map(expenseRequest, Expense.class);
+        var user = getCurrentUser();
+        expense.setBranch(user.getBranch());
         expense.setDate(new Date(System.currentTimeMillis()));
         expense.setUser(getCurrentUser());
         expenseRepository.save(expense);

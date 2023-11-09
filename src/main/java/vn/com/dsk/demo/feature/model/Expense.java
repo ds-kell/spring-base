@@ -15,14 +15,14 @@ public class Expense {
     @Id
     @UuidGenerator
     private String id;
-//    @ManyToOne
-//    @JoinColumn(name = "id_branch")
-//    private Branch branch;
     @ManyToOne
-    @JoinColumn(name="id_user")
+    @JoinColumn(name = "id_branch", nullable = false)
+    private Branch branch;
+    @ManyToOne
+    @JoinColumn(name="id_user", nullable = false)
     private User user;
     private int total;
     private Date date;
-    @Column(name = "note", columnDefinition = "text")
+    @Column(name = "note", columnDefinition = "nvarchar(255)")
     private String note;
 }
