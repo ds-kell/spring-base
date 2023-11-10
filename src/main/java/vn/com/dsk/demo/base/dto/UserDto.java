@@ -6,7 +6,6 @@ import lombok.Data;
 import vn.com.dsk.demo.feature.model.Branch;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
@@ -15,7 +14,7 @@ public class UserDto {
     private String id;
     private String username;
     private String email;
-    private List<AuthorityDto> authorityDtos;
+    private String role;
     private Branch branch;
     private String fullName;
     private String address;

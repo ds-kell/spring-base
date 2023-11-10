@@ -16,18 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 import vn.com.dsk.demo.base.dto.request.LoginRequest;
 import vn.com.dsk.demo.base.dto.request.SignupRequest;
 import vn.com.dsk.demo.base.dto.response.JwtResponse;
-import vn.com.dsk.demo.base.exception.EntityNotFoundException;
 import vn.com.dsk.demo.base.exception.ServiceException;
-import vn.com.dsk.demo.base.model.Authority;
 import vn.com.dsk.demo.base.model.User;
-import vn.com.dsk.demo.base.repository.AuthorityRepository;
 import vn.com.dsk.demo.base.repository.UserRepository;
 import vn.com.dsk.demo.base.security.jwt.JwtUtils;
 import vn.com.dsk.demo.base.service.AuthService;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Service
@@ -36,8 +31,6 @@ import java.util.Set;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
-
-    private final AuthorityRepository authorityRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -54,15 +47,7 @@ public class AuthServiceImpl implements AuthService {
         user.setUsername(signupRequest.getUsername());
         user.setEmail(signupRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-
-        Set<String> listAuthority = signupRequest.getAuthorities();
-
-        Set<Authority> authorities = new HashSet<>();
-
-        if (listAuthority != null && !listAuthority.isEmpty()) {
-            listAuthority.forEach(permission -> authorities.add(authorityRepository.findByRole(permission).orElseThrow(() -> new EntityNotFoundException(AuthorityRepository.class.getName(), permission))));
-        }
-        user.setAuthorities(authorities);
+        user.setAuthorities(signupRequest.getRole());
         try {
             userRepository.save(user);
             return new JwtResponse(
@@ -70,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
                     jwtUtils.generateRefreshToken(signupRequest.getUsername()),
                     "Bearer",
                     signupRequest.getUsername(),
-                    listAuthority != null ? listAuthority.stream().toList() : null);
+                    user.getAuthorities() != null ? user.getAuthorities() : null);
         } catch (DataAccessException e) {
             log.error("Error saving user to the database", e);
             throw new ServiceException("Failed to add user", "err.api.failed-to-add-user");
@@ -78,7 +63,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional
     public JwtResponse login(LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager
@@ -87,13 +71,14 @@ public class AuthServiceImpl implements AuthService {
                     );
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            List<String> authorities = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+            List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+            System.out.println(roles);
             return new JwtResponse(
                     jwtUtils.generateAccessToken(userDetails),
                     jwtUtils.generateRefreshToken(userDetails),
                     "Bearer",
                     userDetails.getUsername(),
-                    authorities);
+                    roles.get(0));
 
         } catch (AuthenticationException authenticationException) {
             throw new ServiceException("Username or password is invalid", "err.authorize.unauthorized");

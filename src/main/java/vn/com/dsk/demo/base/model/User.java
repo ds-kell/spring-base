@@ -9,8 +9,7 @@ import org.hibernate.annotations.UuidGenerator;
 import vn.com.dsk.demo.feature.model.Branch;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+
 @Data
 @Entity
 @Table(name= "tbl_user")
@@ -26,13 +25,8 @@ public class User {
     @NotNull
     @Column(name = "password", nullable = false)
     private String password;
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "tbl_user_role",
-            joinColumns = @JoinColumn(name = "id_user"),
-            inverseJoinColumns = @JoinColumn(name = "id_role"))
-    private Set<Authority> authorities = new HashSet<>();
+    @Column(name = "authority")
+    private String authorities;
     @ManyToOne
     @JoinColumn(name = "id_branch", nullable = false)
     private Branch branch;

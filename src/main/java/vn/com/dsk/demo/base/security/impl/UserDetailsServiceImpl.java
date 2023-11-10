@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import vn.com.dsk.demo.base.model.User;
 import vn.com.dsk.demo.base.repository.UserRepository;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,13 +34,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User '" + username + "' is not exist in system"));
     }
 
-    private org.springframework.security.core.userdetails.User createUserSecurity(User user){
-        Set<GrantedAuthority> securityAuthorities = user
-                .getAuthorities()
-                .stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getRole()))
-                .collect(Collectors.toSet());
-
+    private org.springframework.security.core.userdetails.User createUserSecurity(User user) {
+        Set<GrantedAuthority> securityAuthorities = new HashSet<>();
+        securityAuthorities.add(new SimpleGrantedAuthority(user.getAuthorities()));
+        System.out.println(securityAuthorities);
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), securityAuthorities);
 
     }

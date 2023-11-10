@@ -3,8 +3,6 @@ package vn.com.dsk.demo.base.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 public class JwtResponse {
@@ -17,7 +15,7 @@ public class JwtResponse {
 
     private String username;
 
-    private List<String> authorities;
+    private String role;
 
     public JwtResponse() {
 

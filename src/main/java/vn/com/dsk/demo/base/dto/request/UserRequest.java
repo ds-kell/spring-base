@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.Set;
 @Data
 public class UserRequest {
     @NotBlank
@@ -17,12 +16,12 @@ public class UserRequest {
     @Size(max = 50)
     @Email
     private String email;
-    private Set<String> roles;
+    private String role;
     @NotBlank
     @Size(min = 5, max = 40)
     private String password;
     @NotNull
-    private String branchId;
+    private Integer branchId;
     private String fullName;
     private String address;
     private Date dob;
