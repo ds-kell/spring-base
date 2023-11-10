@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class PickingInDetailRequest {
     @NotNull
-    private Integer idBook;
+    private Integer bookId;
     @NotNull
     private int quantity;
     @NotNull

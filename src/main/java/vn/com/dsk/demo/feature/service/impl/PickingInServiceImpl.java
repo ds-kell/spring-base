@@ -14,8 +14,10 @@ import vn.com.dsk.demo.feature.dto.PickingInDetailDto;
 import vn.com.dsk.demo.feature.dto.PickingInDto;
 import vn.com.dsk.demo.feature.dto.request.PickingInRequest;
 import vn.com.dsk.demo.feature.model.Book;
+import vn.com.dsk.demo.feature.model.BookDetail;
 import vn.com.dsk.demo.feature.model.PickingIn;
 import vn.com.dsk.demo.feature.model.PickingInDetail;
+import vn.com.dsk.demo.feature.repository.BookDetailRepository;
 import vn.com.dsk.demo.feature.repository.BookRepository;
 import vn.com.dsk.demo.feature.repository.PickingInRepository;
 import vn.com.dsk.demo.feature.service.PickingInService;
@@ -36,20 +38,37 @@ public class PickingInServiceImpl implements PickingInService {
 
     private final UserRepository userRepository;
 
+    private final BookDetailRepository bookDetailRepository;
 
     @Override
     public String createPickingIn(PickingInRequest pickingInRequest) {
         PickingIn pickingIn = modelMapper.map(pickingInRequest, PickingIn.class);
-        List<PickingInDetail> pickingInDetails = pickingInRequest.getPickingInDetailRequests().stream().map(e -> {
-            PickingInDetail pickingInDetail = new PickingInDetail();
+        var user = getCurrentUser();
+        List<PickingInDetail> pickingInDetails = pickingInRequest.getPickingInDetailRequests().stream()
+                .map(pickingInDetailRequest -> {
 
-            var book = bookRepository.findById(e.getIdBook()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), e.getIdBook().toString()));
+                    PickingInDetail pickingInDetail = new PickingInDetail();
 
-            pickingInDetail.setPickingIn(pickingIn);
-            pickingInDetail.setBook(book);
-            pickingInDetail.setQuantity(e.getQuantity());
-            return pickingInDetail;
-        }).toList();
+                    var book = bookRepository.findById(pickingInDetailRequest.getBookId()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), pickingInDetailRequest.getBookId().toString()));
+
+                    var bookDetail = bookDetailRepository.findBookDetailByBookIdAndBranchId(pickingInDetailRequest.getBookId(), user.getBranch().getId());
+
+                    if (bookDetail == null) {
+                        bookDetail = new BookDetail();
+                        bookDetail.setQuantity(0);
+                        bookDetail.setBranch(user.getBranch());
+                        bookDetail.setBook(book);
+                        try {
+                            bookDetailRepository.save(bookDetail);
+                        } catch (Exception exception) {
+                            log.error("Error create book detail", exception);
+                        }
+                    }
+                    pickingInDetail.setPickingIn(pickingIn);
+                    pickingInDetail.setBook(book);
+                    pickingInDetail.setQuantity(pickingInDetailRequest.getQuantity());
+                    return pickingInDetail;
+                }).toList();
         pickingIn.setPickingInDetails(pickingInDetails);
         pickingIn.setUser(getCurrentUser());
         pickingInRepository.save(pickingIn);
