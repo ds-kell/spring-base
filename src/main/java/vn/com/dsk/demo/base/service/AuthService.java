@@ -10,5 +10,5 @@ public interface AuthService {
 
     JwtResponse login(LoginRequest loginRequest);
 
-    String verifyExpiration(String refreshToken);
+    JwtResponse verifyExpiration(String refreshToken);
 }

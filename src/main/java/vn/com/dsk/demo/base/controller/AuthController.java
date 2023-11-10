@@ -27,10 +27,9 @@ public class AuthController {
     public ResponseEntity<Response> registerAccount(@Valid @RequestBody SignupRequest signupRequest) {
         return ResponseUtils.ok(authService.signup(signupRequest));
     }
-    @GetMapping("private/auth/refresh-token")
-    public ResponseEntity<Response> refreshToken(@Valid @RequestHeader(HttpHeaders.AUTHORIZATION) String refreshToken) {
-        final String space = "\\s+";
-        return ResponseUtils.ok("verified", authService.verifyExpiration(refreshToken.split(space)[1]));
-    }
 
+    @GetMapping("private/auth/refresh-token")
+    public ResponseEntity<Response> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String refreshToken) {
+        return ResponseUtils.ok("verified", authService.verifyExpiration(refreshToken));
+    }
 }
