@@ -16,9 +16,6 @@ public class Expense {
     @UuidGenerator
     private String id;
     @ManyToOne
-    @JoinColumn(name = "id_branch", nullable = false)
-    private Branch branch;
-    @ManyToOne
     @JoinColumn(name="id_user", nullable = false)
     private User user;
     private int total;

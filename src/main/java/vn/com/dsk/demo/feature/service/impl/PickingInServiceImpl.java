@@ -17,7 +17,6 @@ import vn.com.dsk.demo.feature.model.Book;
 import vn.com.dsk.demo.feature.model.PickingIn;
 import vn.com.dsk.demo.feature.model.PickingInDetail;
 import vn.com.dsk.demo.feature.repository.BookRepository;
-import vn.com.dsk.demo.feature.repository.BranchRepository;
 import vn.com.dsk.demo.feature.repository.PickingInRepository;
 import vn.com.dsk.demo.feature.service.PickingInService;
 
@@ -37,13 +36,10 @@ public class PickingInServiceImpl implements PickingInService {
 
     private final UserRepository userRepository;
 
-    private final BranchRepository branchRepository;
 
     @Override
     public String createPickingIn(PickingInRequest pickingInRequest) {
         PickingIn pickingIn = modelMapper.map(pickingInRequest, PickingIn.class);
-        var user = getCurrentUser();
-        pickingIn.setBranch(user.getBranch());
         List<PickingInDetail> pickingInDetails = pickingInRequest.getPickingInDetailRequests().stream().map(e -> {
             PickingInDetail pickingInDetail = new PickingInDetail();
 

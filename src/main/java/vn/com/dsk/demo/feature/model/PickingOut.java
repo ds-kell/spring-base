@@ -18,9 +18,6 @@ public class PickingOut {
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "id_branch", nullable = false)
-    private Branch branch;
     private Date date;
     @Column(name = "customer_name", columnDefinition = "nvarchar(255)")
     private String customerName;

@@ -18,9 +18,6 @@ public class Proposal {
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "id_branch",nullable = false)
-    private Branch branch;
     private Date date;
     @OneToMany(mappedBy = "proposal", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<ProposalDetail> proposalDetails;
