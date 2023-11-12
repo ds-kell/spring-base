@@ -40,6 +40,7 @@ public class PickingOutServiceImpl implements PickingOutService {
     @Override
     @Transactional
     public String createPickingOut(PickingOutRequest pickingOutRequest) {
+        System.out.println(pickingOutRequest);
         PickingOut pickingOut = modelMapper.map(pickingOutRequest, PickingOut.class);
         List<PickingOutDetail> pickingOutDetails = pickingOutRequest.getPickingOutDetailRequests().stream().map(e -> {
             PickingOutDetail pickingOutDetail = new PickingOutDetail();
@@ -47,6 +48,7 @@ public class PickingOutServiceImpl implements PickingOutService {
             pickingOutDetail.setPickingOut(pickingOut);
             pickingOutDetail.setBook(book);
             pickingOutDetail.setQuantity(e.getQuantity());
+            pickingOutDetail.setTotal(e.getTotal());
             return pickingOutDetail;
         }).toList();
         pickingOut.setPickingOutDetails(pickingOutDetails);

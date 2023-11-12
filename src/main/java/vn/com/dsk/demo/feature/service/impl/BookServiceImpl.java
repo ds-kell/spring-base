@@ -1,5 +1,6 @@
 package vn.com.dsk.demo.feature.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,8 @@ public class BookServiceImpl implements BookService {
 
     private final ModelMapper modelMapper;
 
+
+
     @Override
     public List<BookDto> getAllBooks() {
         return bookRepository.findAllByIsActive(true).stream().map(e -> modelMapper.map(e, BookDto.class)).collect(Collectors.toList());
@@ -52,17 +55,18 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public String createBook(List<BookRequest> bookRequests) {
-
         List<Book> books = bookRequests.stream().map(
                 bookRequest -> {
-                    Book book = modelMapper.map(bookRequest, Book.class);
-                    var category = categoryRepository.findById(bookRequest.getCategoryId());
-                    category.ifPresent(book::setCategory);
+                    var book = modelMapper.map(bookRequest, Book.class);
+                    var category = categoryRepository.findById(bookRequest.getCategoryId()).orElseThrow();
+                    book.setCategory(category);
                     return book;
                 }
-        ).toList();
+        ).collect(Collectors.toList());
         bookRepository.saveAll(books);
+        bookRepository.flush();
         return "Create book success";
     }
 
@@ -119,6 +123,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public BookDto getBookById(Integer bookId) {
+        var book = bookRepository.findById(bookId).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), bookId.toString()));
+        BookDto bookDto = modelMapper.map(book, BookDto.class);
+        bookDto.setCategoryDto(modelMapper.map(book.getCategory(), CategoryDto.class));
+        return bookDto;
+    }
+
+    @Override
     public List<BookDetailDto> getBookDetailByBranch(Integer branchId) {
         return null;
     }
@@ -134,7 +146,7 @@ public class BookServiceImpl implements BookService {
                         bookDetail.setQuantity(bookDetailRequest.getQuantity());
                         bookDetail.setBook(bookRepository.findById(bookDetailRequest.getBookId()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), bookDetailRequest.getBookId().toString())));
                         bookDetail.setBranch(branchRepository.findById(bookDetailRequest.getBranchId()).orElseThrow(() -> new EntityNotFoundException(Branch.class.getName(), bookDetailRequest.getBranchId().toString())));
-                    }else{
+                    } else {
                         bookDetail.setQuantity(bookDetail.getQuantity() + bookDetailRequest.getQuantity());
                     }
                     bookDetails.add(bookDetail);

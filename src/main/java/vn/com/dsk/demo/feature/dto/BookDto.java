@@ -6,8 +6,7 @@ import lombok.Data;
 public class BookDto {
     private Integer id;
     private String name;
-    private Integer importPrice;
-    private Integer exportPrice;
-    private int quantity;
+    private int importPrice;
+    private int exportPrice;
     private CategoryDto categoryDto;
 }

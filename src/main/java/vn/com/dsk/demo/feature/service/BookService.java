@@ -26,4 +26,6 @@ public interface BookService {
     List<BookDto> getBooksByCategory(Integer categoryId);
 
     String updateBook(List<UpdateBookRequest> updateBookRequests);
+
+    BookDto getBookById(Integer bookId);
 }

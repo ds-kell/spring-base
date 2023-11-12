@@ -28,9 +28,14 @@ public class BookController {
         return ResponseUtils.ok(bookService.getAllBookDetails());
     }
 
+    @GetMapping("detail/{bookDetailId}")
+    public ResponseEntity<?> getBookDetailById(@PathVariable String bookDetailId) {
+        return ResponseUtils.ok(bookService.getBookDetailById(bookDetailId));
+    }
+
     @GetMapping("{bookId}")
-    public ResponseEntity<?> getBookDetailById(@PathVariable String bookId) {
-        return ResponseUtils.ok(bookService.getBookDetailById(bookId));
+    public ResponseEntity<?> getBookById(@PathVariable Integer bookId) {
+        return ResponseUtils.ok(bookService.getBookById(bookId));
     }
 
     @DeleteMapping("delete/{bookId}")

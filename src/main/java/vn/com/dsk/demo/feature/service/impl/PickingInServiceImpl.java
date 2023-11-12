@@ -42,6 +42,7 @@ public class PickingInServiceImpl implements PickingInService {
 
     @Override
     public String createPickingIn(PickingInRequest pickingInRequest) {
+        System.out.println(pickingInRequest);
         PickingIn pickingIn = modelMapper.map(pickingInRequest, PickingIn.class);
         var user = getCurrentUser();
         List<PickingInDetail> pickingInDetails = pickingInRequest.getPickingInDetailRequests().stream()
@@ -49,9 +50,9 @@ public class PickingInServiceImpl implements PickingInService {
 
                     PickingInDetail pickingInDetail = new PickingInDetail();
 
-                    var book = bookRepository.findById(pickingInDetailRequest.getBookId()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), pickingInDetailRequest.getBookId().toString()));
+                    var book = bookRepository.findById(pickingInDetailRequest.getIdBook()).orElseThrow(() -> new EntityNotFoundException(Book.class.getName(), pickingInDetailRequest.getIdBook().toString()));
 
-                    var bookDetail = bookDetailRepository.findBookDetailByBookIdAndBranchId(pickingInDetailRequest.getBookId(), user.getBranch().getId());
+                    var bookDetail = bookDetailRepository.findBookDetailByBookIdAndBranchId(pickingInDetailRequest.getIdBook(), user.getBranch().getId());
 
                     if (bookDetail == null) {
                         bookDetail = new BookDetail();

@@ -17,5 +17,5 @@ public class PickingOutRequest {
     @NotNull
     private Date date;
     private String note;
-    List<PickingOutDetailRequest> PickingOutDetailRequests;
+    List<PickingOutDetailRequest> pickingOutDetailRequests;
 }
