@@ -1,5 +1,6 @@
 package vn.com.dsk.demo.feature.service;
 
+import vn.com.dsk.demo.feature.dto.AllBookDto;
 import vn.com.dsk.demo.feature.dto.BookDetailDto;
 import vn.com.dsk.demo.feature.dto.BookDto;
 import vn.com.dsk.demo.feature.dto.UpdateBookRequest;
@@ -13,7 +14,7 @@ public interface BookService {
 
     List<BookDetailDto> getAllBookDetails();
 
-    BookDetailDto getBookDetailById(String bookId);
+    BookDetailDto getBookDetailById(String bookDetailId);
 
     List<BookDetailDto> getBookDetailByBranch(Integer branchId);
 
@@ -28,4 +29,8 @@ public interface BookService {
     String updateBook(List<UpdateBookRequest> updateBookRequests);
 
     BookDto getBookById(Integer bookId);
+
+    List<BookDetailDto> getAllBookDetailByBookId(Integer bookId);
+
+    List<AllBookDto> getAllBooDetailByAllBook();
 }

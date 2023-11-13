@@ -23,6 +23,16 @@ public class BookController {
         return ResponseUtils.ok(bookService.getAllBooks());
     }
 
+    @GetMapping("all-detail-by-all-book")
+    public ResponseEntity<?> getAllBooDetailByAllBook() {
+        return ResponseUtils.ok(bookService.getAllBooDetailByAllBook());
+    }
+
+    @GetMapping("all-detail-by-book-id/{bookId}")
+    public ResponseEntity<?> getAllBooDetailByBook(@PathVariable Integer bookId) {
+        return ResponseUtils.ok(bookService.getAllBookDetailByBookId(bookId));
+    }
+
     @GetMapping("all-book-detail")
     public ResponseEntity<?> getAllBookDetails() {
         return ResponseUtils.ok(bookService.getAllBookDetails());
@@ -58,4 +68,5 @@ public class BookController {
     public ResponseEntity<?> updateBook(@RequestBody List<UpdateBookRequest> updateBookRequests) {
         return ResponseUtils.ok(bookService.updateBook(updateBookRequests));
     }
+
 }

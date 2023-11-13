@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import vn.com.dsk.demo.base.exception.EntityNotFoundException;
-import vn.com.dsk.demo.feature.dto.BookDetailDto;
-import vn.com.dsk.demo.feature.dto.BookDto;
-import vn.com.dsk.demo.feature.dto.CategoryDto;
-import vn.com.dsk.demo.feature.dto.UpdateBookRequest;
+import vn.com.dsk.demo.feature.dto.*;
 import vn.com.dsk.demo.feature.dto.request.BookDetailRequest;
 import vn.com.dsk.demo.feature.dto.request.BookRequest;
 import vn.com.dsk.demo.feature.model.Book;
@@ -38,7 +35,6 @@ public class BookServiceImpl implements BookService {
     private final CategoryRepository categoryRepository;
 
     private final ModelMapper modelMapper;
-
 
 
     @Override
@@ -100,6 +96,7 @@ public class BookServiceImpl implements BookService {
                 bookDetail -> {
                     if (bookDetail.getBook().getIsActive()) {
                         var bookDetailDto = modelMapper.map(bookDetail, BookDetailDto.class);
+                        bookDetailDto.setBranchDto(modelMapper.map(bookDetail.getBranch(), BranchDto.class));
                         var bookDto = modelMapper.map(bookDetail.getBook(), BookDto.class);
                         bookDto.setCategoryDto(modelMapper.map(bookDetail.getBook().getCategory(), CategoryDto.class));
                         bookDetailDto.setBookDto(bookDto);
@@ -111,12 +108,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDetailDto getBookDetailById(String bookId) {
-        BookDetail bookDetail = bookDetailRepository.findBookDetailById(bookId);
+    public BookDetailDto getBookDetailById(String bookDetailId) {
+        BookDetail bookDetail = bookDetailRepository.findBookDetailById(bookDetailId);
         BookDetailDto bookDetailDto = modelMapper.map(bookDetail, BookDetailDto.class);
         if (bookDetail.getBook().getIsActive()) {
             var bookDto = modelMapper.map(bookDetail.getBook(), BookDto.class);
             bookDto.setCategoryDto(modelMapper.map(bookDetail.getBook().getCategory(), CategoryDto.class));
+            bookDetailDto.setBranchDto(modelMapper.map(bookDetail.getBranch(), BranchDto.class));
             bookDetailDto.setBookDto(bookDto);
         }
         return bookDetailDto;
@@ -149,10 +147,55 @@ public class BookServiceImpl implements BookService {
                     } else {
                         bookDetail.setQuantity(bookDetail.getQuantity() + bookDetailRequest.getQuantity());
                     }
+                    System.out.println(bookDetail);
                     bookDetails.add(bookDetail);
                 }
         );
         bookDetailRepository.saveAll(bookDetails);
         return "Book detail have been created";
+    }
+
+    @Override
+    @Transactional
+    public List<BookDetailDto> getAllBookDetailByBookId(Integer bookId) {
+        var book = bookRepository.findById(bookId).orElseThrow(()-> new EntityNotFoundException(Book.class.getName(), bookId.toString()));
+        if(book.getIsActive()){
+            return bookDetailRepository.findAllBookDetailByBookId(bookId).stream().map(
+                    bookDetail -> {
+                        BookDetailDto bookDetailDto = modelMapper.map(bookDetail, BookDetailDto.class);
+                        bookDetailDto.setBranchDto(modelMapper.map(bookDetail.getBranch(), BranchDto.class));
+                        return bookDetailDto;
+                    }
+            ).toList();
+        }else{
+            return new ArrayList<>();
+        }
+}
+
+    @Override
+    @Transactional
+    public List<AllBookDto> getAllBooDetailByAllBook() {
+        List<AllBookDto> allBookDtos = new ArrayList<>();
+        List<Book> books = bookRepository.findAllByIsActive(true);
+        books.forEach(
+                book -> {
+                    AllBookDto allBookDto = new AllBookDto();
+                    var bookDto = modelMapper.map(book, BookDto.class);
+                    bookDto.setCategoryDto(modelMapper.map(book.getCategory(), CategoryDto.class));
+                    List<DetailByBookDto> detailByBookDtos = bookDetailRepository.findAllBookDetailByBookId(book.getId()).stream().map(
+                            bookDetail -> {
+                                DetailByBookDto detailByBookDto = new DetailByBookDto();
+                                detailByBookDto.setId(bookDetail.getId());
+                                detailByBookDto.setBranchDto(modelMapper.map(bookDetail.getBranch(), BranchDto.class));
+                                detailByBookDto.setQuantity(bookDetail.getQuantity());
+                                return detailByBookDto;
+                            }
+                    ).toList();
+                    allBookDto.setBookDto(bookDto);
+                    allBookDto.setBookDetailDtos(detailByBookDtos);
+                    allBookDtos.add(allBookDto);
+                }
+        );
+        return allBookDtos;
     }
 }
