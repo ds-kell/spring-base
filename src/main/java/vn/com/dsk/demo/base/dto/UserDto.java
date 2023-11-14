@@ -14,7 +14,7 @@ public class UserDto {
     private String id;
     private String username;
     private String email;
-    private String role;
+    private String authorities;
     private Branch branch;
     private String fullName;
     private String address;
