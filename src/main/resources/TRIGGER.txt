@@ -92,3 +92,55 @@ BEGIN
         FROM Inserted
     END
 END;
+
+//TRIGGER 4
+
+USE [bs_db_2]
+GO
+
+ALTER TRIGGER [dbo].[trigger_update_book_detail_picking_out]
+ON [bs_db_2].[dbo].[tbl_picking_out_detail]
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        DECLARE @id_book INT;
+        DECLARE @quantity INT;
+
+        DECLARE update_cursor CURSOR LOCAL FORWARD_ONLY FOR
+        SELECT id_book, quantity FROM inserted;
+
+        OPEN update_cursor;
+
+        FETCH NEXT FROM update_cursor INTO @id_book, @quantity;
+
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            BEGIN TRANSACTION;
+
+            IF EXISTS (SELECT 1 FROM [bs_db_2].[dbo].[tbl_book_detail] WHERE id_book = @id_book AND quantity >= @quantity)
+            BEGIN
+                UPDATE [bs_db_2].[dbo].[tbl_book_detail]
+                SET quantity = quantity - @quantity
+                WHERE id_book = @id_book;
+            END
+            ELSE
+            BEGIN
+                ROLLBACK TRANSACTION;
+            END
+
+            COMMIT TRANSACTION;
+
+            FETCH NEXT FROM update_cursor INTO @id_book, @quantity;
+        END
+
+        CLOSE update_cursor;
+        DEALLOCATE update_cursor;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+    END CATCH
+END
