@@ -26,7 +26,7 @@ public class UserController {
         return ResponseUtils.ok(userService.getUserInfo());
     }
 
-    @PutMapping("private/user/update-info")
+    @PostMapping("private/user/update-info")
     public ResponseEntity<?> updateInfo(@RequestBody UserInfoRequest userInfoRequest) {
         return ResponseUtils.ok(userService.updateInfo(userInfoRequest));
     }
@@ -36,7 +36,7 @@ public class UserController {
         return ResponseUtils.ok(userService.createUser(userRequest));
     }
 
-    @PutMapping("private/user/update-workplace")
+    @PostMapping("private/user/update-workplace")
     public ResponseEntity<?> updateInfo(@RequestBody Integer branchId) {
         return ResponseUtils.ok(userService.updateWorkplace(branchId));
     }

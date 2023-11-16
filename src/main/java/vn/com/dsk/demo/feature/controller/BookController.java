@@ -64,7 +64,7 @@ public class BookController {
     }
 
 
-    @PutMapping("update-book")
+    @PostMapping("update-book")
     public ResponseEntity<?> updateBook(@RequestBody List<UpdateBookRequest> updateBookRequests) {
         return ResponseUtils.ok(bookService.updateBook(updateBookRequests));
     }
