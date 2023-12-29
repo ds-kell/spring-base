@@ -36,6 +36,10 @@ public class JwtUtils {
         return buildToken(new HashMap<>(), username, SecurityConstants.REFRESH_TOKEN_EXPIRATION);
     }
 
+    public String generateResetPasswordToken(String username) {
+        return buildToken(new HashMap<>(), username, SecurityConstants.RESET_TOKEN_EXPIRATION);
+    }
+
     private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
         return Jwts.builder().claims(extraClaims).subject(userDetails.getUsername()).issuedAt(new Date(System.currentTimeMillis())).expiration(new Date(System.currentTimeMillis() + expiration)).signWith(getSignKey()).compact();
     }

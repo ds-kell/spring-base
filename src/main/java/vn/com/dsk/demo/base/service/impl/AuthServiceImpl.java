@@ -13,6 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import vn.com.dsk.demo.base.dto.request.ChangePasswordRequest;
+import vn.com.dsk.demo.base.dto.request.ForgotPasswordRequest;
 import vn.com.dsk.demo.base.dto.request.LoginRequest;
 import vn.com.dsk.demo.base.dto.request.SignupRequest;
 import vn.com.dsk.demo.base.dto.response.JwtResponse;
@@ -22,11 +25,14 @@ import vn.com.dsk.demo.base.model.Account;
 import vn.com.dsk.demo.base.model.Authority;
 import vn.com.dsk.demo.base.repository.AccountRepository;
 import vn.com.dsk.demo.base.repository.AuthorityRepository;
+import vn.com.dsk.demo.base.repository.PasswordResetTokenRepository;
+import vn.com.dsk.demo.base.security.impl.UserDetailsServiceImpl;
 import vn.com.dsk.demo.base.security.jwt.JwtUtils;
 import vn.com.dsk.demo.base.service.AuthService;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -44,6 +50,10 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtils jwtUtils;
 
     private final AuthenticationManager authenticationManager;
+
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
+
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Override
     @Transactional
@@ -100,12 +110,43 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String verifyExpiration(String refreshToken) {
-        if (jwtUtils.validateToken(refreshToken)) {
-            return refreshToken;
+    public JwtResponse verifyExpiration(String refreshToken) {
+        final String space = "\\s+";
+        String token = "";
+        if (StringUtils.hasText(refreshToken) && refreshToken.startsWith("Bearer ")) {
+            token = refreshToken.split(space)[1];
+        }
+        if (jwtUtils.validateToken(token)) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(jwtUtils.extractUsername(token));
+            List<String> authorities = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+            return new JwtResponse(
+                    jwtUtils.generateAccessToken(userDetails),
+                    jwtUtils.generateRefreshToken(userDetails),
+                    "Bearer",
+                    userDetails.getUsername(),
+                    authorities);
         } else {
             throw new ServiceException("Login session has expired", "err.token.expired");
         }
+    }
+
+    @Override
+    public String forgotPassword(ForgotPasswordRequest forgotPasswordRequest) {
+        Optional<Account> account = accountRepository.findByEmail(forgotPasswordRequest.getEmail());
+        if(account.isPresent()){
+            String token = jwtUtils.generateResetPasswordToken(account.get().getUsername());
+            System.out.println(token);
+            String url = "http://localhost:8088/api/private/auth/reset-password/?token=" + token;
+            return "Password reset email has been sent";
+        }
+        else {
+            return "Email is not registered";
+        }
+    }
+
+    @Override
+    public JwtResponse changePassword(ChangePasswordRequest changePasswordRequest) {
+        return null;
     }
 }
 

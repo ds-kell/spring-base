@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import vn.com.dsk.demo.base.security.jwt.JwtAuthenticationEntryPoint;
 import vn.com.dsk.demo.base.security.jwt.JwtAuthenticationFilter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -23,6 +24,8 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final AuthenticationProvider authenticationProvider;
+
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private static final String[] WHITE_LIST_URL = {"/api-docs",
             "/api/v1/auth/**",
@@ -40,11 +43,12 @@ public class SecurityConfiguration {
     public SecurityFilterChain defaultFilterChain(HttpSecurity http) throws Exception {
         http.cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL).permitAll()
                                 .requestMatchers("api/public/**").permitAll()
                                 .requestMatchers("api/private/**").authenticated()
-//                                .requestMatchers("api/private/**").permitAll()
                                 .requestMatchers("api/admin/**").hasRole("ADMIN")
                                 .anyRequest().permitAll()
                 )
@@ -53,5 +57,4 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS));
         return http.build();
     }
-
 }
