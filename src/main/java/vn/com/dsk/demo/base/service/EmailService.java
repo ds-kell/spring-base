@@ -6,4 +6,6 @@ public interface EmailService {
     String sendSimpleMail(EmailDetails details);
 
     String sendMailWithAttachment(EmailDetails details);
+
+    String sendMailVerify(String emailAddress, String username);
 }

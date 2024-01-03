@@ -10,17 +10,17 @@ import vn.com.dsk.demo.base.service.EmailService;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/public/")
 public class EmailController {
 
     private final EmailService emailService;
 
-    @PostMapping("public/mail/send-mail")
+    @PostMapping("mail/send-mail")
     public String sendMail(@RequestBody EmailDetails details) {
         return emailService.sendSimpleMail(details);
     }
 
-    @PostMapping("public/mail/send-mail-attachment")
+    @PostMapping("mail/send-mail-attachment")
     public String sendMailWithAttachment(@RequestBody EmailDetails details) {
         return emailService.sendMailWithAttachment(details);
     }
