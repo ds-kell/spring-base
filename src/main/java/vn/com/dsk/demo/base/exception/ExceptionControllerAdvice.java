@@ -11,35 +11,15 @@ import vn.com.dsk.demo.base.utils.response.ErrorResponse;
 import vn.com.dsk.demo.base.utils.response.Response;
 import vn.com.dsk.demo.base.utils.response.ResponseUtils;
 
-import java.sql.SQLException;
 
 @Slf4j
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 
     @ExceptionHandler({Exception.class})
-    public ResponseEntity<Response> unknownErrorHandler(Exception e) {
-        log.error("Unexpected Exception", e);
-        String errKey = "err.sys.unexpected-exception";
-        String errMsg = "Unknown error";
-        return ResponseUtils.internalErr(ErrorResponse.of(errKey, errMsg));
-    }
-
-    @ExceptionHandler({ServiceException.class})
-    public ResponseEntity<Response> ServiceErrorHandler(ServiceException e) {
-        String errKey = e.getMessage();
-        String errMsg = e.getErrMsg();
-        log.error(errKey, errMsg);
-        return ResponseUtils.badRequest(ErrorResponse.of(errKey, errMsg));
-    }
-
-
-    @ExceptionHandler({SQLException.class})
-    public ResponseEntity<Response> SQLErrorHandler(Exception e) {
-        log.error("Unexpected Exception", e);
-        String errKey = "err.sys.sql-exception";
-        String errMsg = "Invalid data";
-        return ResponseUtils.internalErr(ErrorResponse.of(errKey, errMsg));
+    public ResponseEntity<Response> exceptionHandler(Exception e) {
+        log.error("Exception", e);
+        return ResponseUtils.internalErr(ErrorResponse.of(e.getCause().getMessage(), e.getMessage()));
     }
 
     @ExceptionHandler({EntityNotFoundException.class})
@@ -50,10 +30,4 @@ public class ExceptionControllerAdvice {
         log.error(errKey, errMsg);
         return ResponseUtils.badRequest(ErrorResponse.of(errKey, errMsg));
     }
-
-//    @ExceptionHandler(ResourceNotFoundException.class)
-//    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-//    public ErrorMessage resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-//        return new ErrorMessage("NOT FOUND");
-//    }
 }
