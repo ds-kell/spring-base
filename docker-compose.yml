@@ -6,28 +6,29 @@ services:
     image: mysql:latest
     container_name: mysql-container
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: store_db
-      MYSQL_USER: root
+      MYSQL_DATABASE: spring_base
+      MYSQL_USER: kell
       MYSQL_PASSWORD: kell0502
     networks:
       - dsf_network
 
   # Spring Boot Application
   spring-app:
-    image: your-spring-boot-image:latest
+    image: spring:version1
     container_name: spring-app-container
     ports:
-      - "8080:8080"
+      - "8089:8088"
     depends_on:
       - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/store_db
-      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spring_base
+      SPRING_DATASOURCE_USERNAME: kell
       SPRING_DATASOURCE_PASSWORD: kell0502
       SPRING_PROFILES_ACTIVE: docker
+    restart: always
     networks:
       - dsf_network
 
