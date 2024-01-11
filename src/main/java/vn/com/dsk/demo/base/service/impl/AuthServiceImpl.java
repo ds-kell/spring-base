@@ -14,10 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import vn.com.dsk.demo.base.dto.request.ChangePasswordRequest;
-import vn.com.dsk.demo.base.dto.request.ForgotPasswordRequest;
-import vn.com.dsk.demo.base.dto.request.LoginRequest;
-import vn.com.dsk.demo.base.dto.request.SignupRequest;
+import vn.com.dsk.demo.base.dto.request.*;
 import vn.com.dsk.demo.base.dto.response.JwtResponse;
 import vn.com.dsk.demo.base.exception.EntityNotFoundException;
 import vn.com.dsk.demo.base.exception.ServiceException;
@@ -29,6 +26,7 @@ import vn.com.dsk.demo.base.repository.PasswordResetTokenRepository;
 import vn.com.dsk.demo.base.security.impl.UserDetailsServiceImpl;
 import vn.com.dsk.demo.base.security.jwt.JwtUtils;
 import vn.com.dsk.demo.base.service.AuthService;
+import vn.com.dsk.demo.base.service.EmailService;
 
 import java.util.HashSet;
 import java.util.List;
@@ -55,17 +53,28 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsServiceImpl userDetailsService;
 
+    private final EmailService emailService;
+
     @Override
     @Transactional
-    public JwtResponse signup(SignupRequest signupRequest) {
+    public String signup(SignupRequest signupRequest) {
         if (accountRepository.existsByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail()))
             throw new ServiceException("Email or username is existed in system", "err.api.email-username-is-existed");
-        Account user = new Account();
-        user.setUsername(signupRequest.getUsername());
-        user.setEmail(signupRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        emailService.sendVerifyCode(signupRequest);
+        return "Check your email";
+    }
 
-        Set<String> listAuthority = signupRequest.getAuthorities();
+    @Override
+    public JwtResponse verifySignUp(VerifySignUp verifySignUp) {
+        if(verifySignUp.getVerifyCode().equals("")){
+            throw new ServiceException("Verification code is incorrect", "err.api.verifyCode-incorrect");
+        }
+        Account user = new Account();
+        user.setUsername(verifySignUp.getUsername());
+        user.setEmail(verifySignUp.getEmail());
+        user.setPassword(passwordEncoder.encode(verifySignUp.getPassword()));
+
+        Set<String> listAuthority = verifySignUp.getAuthorities();
         Set<Authority> authorities = new HashSet<>();
 
         if (listAuthority != null && !listAuthority.isEmpty()) {
@@ -75,10 +84,10 @@ public class AuthServiceImpl implements AuthService {
         try {
             accountRepository.save(user);
             return new JwtResponse(
-                    jwtUtils.generateAccessToken(signupRequest.getUsername()),
-                    jwtUtils.generateRefreshToken(signupRequest.getUsername()),
+                    jwtUtils.generateAccessToken(verifySignUp.getUsername()),
+                    jwtUtils.generateRefreshToken(verifySignUp.getUsername()),
                     "Bearer",
-                    signupRequest.getUsername(),
+                    verifySignUp.getUsername(),
                     listAuthority != null ? listAuthority.stream().toList() : null);
         } catch (DataAccessException e) {
             log.error("Error saving user to the database", e);

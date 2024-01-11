@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class SignupRequest {
+public class VerifySignUp {
     @NotBlank
     @Size(min = 5, max = 20)
     private String username;
@@ -16,4 +16,11 @@ public class SignupRequest {
     @Size(max = 50)
     @Email
     private String email;
+    private Set<String> authorities;
+    @NotBlank
+    @Size(min = 5, max = 40)
+    private String password;
+    @NotBlank
+    @Size(min = 6, max = 6)
+    private String verifyCode;
 }

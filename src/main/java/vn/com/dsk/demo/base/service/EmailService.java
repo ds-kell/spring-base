@@ -1,5 +1,6 @@
 package vn.com.dsk.demo.base.service;
 
+import vn.com.dsk.demo.base.dto.request.SignupRequest;
 import vn.com.dsk.demo.base.model.EmailDetails;
 
 public interface EmailService {
@@ -7,5 +8,7 @@ public interface EmailService {
 
     String sendMailWithAttachment(EmailDetails details);
 
-    String sendMailVerify(String emailAddress, String username);
+    void sendMailVerify(SignupRequest signupRequest);
+
+    void sendVerifyCode(SignupRequest signupRequest);
 }

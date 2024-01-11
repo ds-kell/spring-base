@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.com.dsk.demo.base.dto.request.ChangePasswordRequest;
-import vn.com.dsk.demo.base.dto.request.ForgotPasswordRequest;
-import vn.com.dsk.demo.base.dto.request.LoginRequest;
-import vn.com.dsk.demo.base.dto.request.SignupRequest;
+import vn.com.dsk.demo.base.dto.request.*;
 import vn.com.dsk.demo.base.service.AuthService;
 import vn.com.dsk.demo.base.utils.response.Response;
 import vn.com.dsk.demo.base.utils.response.ResponseUtils;
@@ -28,6 +25,11 @@ public class AuthController {
     @PostMapping("public/auth/signup")
     public ResponseEntity<Response> registerAccount(@Valid @RequestBody SignupRequest signupRequest) {
         return ResponseUtils.ok(authService.signup(signupRequest));
+    }
+
+    @PostMapping("public/auth/verify-signup")
+    public ResponseEntity<Response> verifySignUp(@Valid @RequestBody VerifySignUp verifySignUp) {
+        return ResponseUtils.ok(authService.verifySignUp(verifySignUp));
     }
 
     @GetMapping("private/auth/refresh-token")
