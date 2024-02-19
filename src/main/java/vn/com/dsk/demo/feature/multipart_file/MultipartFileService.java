@@ -8,4 +8,8 @@ public interface MultipartFileService {
     String uploadFile(MultipartFile file) throws IOException;
 
     void exportFile(MultipartFile file) throws IOException;
+
+    void createExcelFile() throws IOException;
+
+    byte[] toByteArray(String filePath) throws IOException;
 }

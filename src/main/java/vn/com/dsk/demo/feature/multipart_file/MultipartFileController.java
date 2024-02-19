@@ -1,6 +1,9 @@
 package vn.com.dsk.demo.feature.multipart_file;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,4 +29,16 @@ public class MultipartFileController {
     public ResponseEntity<?> uploadFileVer2(@RequestPart("file") MultipartFile file) throws IOException {
         return ResponseUtils.ok(multipartFileService.uploadFile(file));
     }
+
+    @GetMapping("/download")
+    public ResponseEntity<?> downloadExcel() throws IOException {
+        multipartFileService.createExcelFile();
+        ByteArrayResource resource = new ByteArrayResource(multipartFileService.toByteArray("example.xlsx"));
+//        InputStreamResource inputStream = new InputStreamResource(resource);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"example.xlsx\"")
+                .body(resource);
+    }
 }
+/*https://github.com/EnggAdda/SpringBootDownloadGetAPIDtaInExcelFile/blob/master/src/main/java/com/example/springbootdownloadexcelfile/controller/ProductController.java*/

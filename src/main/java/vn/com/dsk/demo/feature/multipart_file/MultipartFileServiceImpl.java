@@ -2,12 +2,14 @@ package vn.com.dsk.demo.feature.multipart_file;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 @Service
 @RequiredArgsConstructor
@@ -68,4 +70,33 @@ public class MultipartFileServiceImpl implements MultipartFileService{
             return "unknown";
         }
     }
+
+    @Override
+    public void createExcelFile() throws IOException {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Sheet 1");
+
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("Column 1");
+            headerRow.createCell(1).setCellValue("Column 2");
+
+            Row dataRow = sheet.createRow(1);
+            dataRow.createCell(0).setCellValue("Data 1");
+            dataRow.createCell(1).setCellValue("Data 2");
+
+            FileOutputStream fileOut = new FileOutputStream("example.xlsx");
+            workbook.write(fileOut);
+        }
+    }
+
+    @Override
+    public byte[] toByteArray(String filePath) throws IOException {
+        File file = new File(filePath);
+        byte[] bytes = new byte[(int) file.length()];
+        try (FileInputStream fis = new FileInputStream(file)) {
+            fis.read(bytes);
+        }
+        return bytes;
+    }
+
 }
