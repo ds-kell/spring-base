@@ -40,12 +40,25 @@ public class MultipartFileController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
                 .body(response);
     }
-    @PostMapping("/downloadPdf")
-    public ResponseEntity<?> downloadPdf(@RequestBody PdfModel model) throws IOException, DocumentException {
-        InputStreamResource response = multipartFileService.createPdfFile(model);
+
+    @PostMapping(path = "downloadPdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> downloadPdf(@RequestPart("file") MultipartFile file, PdfModel model) throws IOException, DocumentException {
+        InputStreamResource response = multipartFileService.createPdfFile(model, file);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + model.getFileName())
                 .body(response);
     }
+
+    @PostMapping(path = "example1", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void example1(@RequestParam("param") String param) {
+        // Lấy giá trị từ query string hoặc form-encoded data
+    }
+
+    @PostMapping(path = "example2", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void example2(@RequestPart("file") MultipartFile file, PdfModel model) throws IOException, DocumentException {
+        System.out.println(file.getOriginalFilename() + model.getFileName());
+        // Lấy dữ liệu từ yêu cầu multipart
+    }
+
 }

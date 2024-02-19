@@ -1,8 +1,6 @@
 package vn.com.dsk.demo.feature.multipart_file;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
@@ -15,12 +13,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.sql.SQLOutput;
 
 @Service
 @RequiredArgsConstructor
 public class MultipartFileServiceImpl implements MultipartFileService {
 
     private final FileHelper fileHelper;
+    private boolean add;
 
     @Override
     public String uploadFile(MultipartFile file) {
@@ -97,13 +97,28 @@ public class MultipartFileServiceImpl implements MultipartFileService {
     }
 
     @Override
-    public InputStreamResource createPdfFile(PdfModel model) throws IOException, DocumentException {
+    public InputStreamResource createPdfFile(PdfModel model, MultipartFile file) throws IOException, DocumentException {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             Document document = new Document();
             PdfWriter.getInstance(document, byteArrayOutputStream);
             document.open();
-            document.add(new Paragraph("Hello World! This is a PDF file."));
+            Font font = FontFactory.getFont(FontFactory.COURIER, 20, BaseColor.BLACK);
+            Chunk chunk = new Chunk("Ohayo", font);
+            document.add(chunk);
             document.add(new Paragraph("Content: " + model.getContent()));
+
+            if (!file.isEmpty()) {
+                if (file.getContentType() != null && file.getContentType().startsWith("image")) {
+                    byte[] imageBytes = file.getBytes();
+                    Image image = Image.getInstance(imageBytes);
+                    image.scaleToFit(document.getPageSize().getWidth(), document.getPageSize().getHeight());
+//                    image.setAbsolutePosition(0, document.bottom());
+                    document.add(image);
+                } else {
+                    // Handle non-image file types if necessary
+                    System.out.println("non-image file");
+                }
+            }
             document.add(new Paragraph("Author: " + model.getAuthor()));
             document.close();
             return new InputStreamResource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
