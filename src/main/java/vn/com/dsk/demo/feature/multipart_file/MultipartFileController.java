@@ -1,5 +1,6 @@
 package vn.com.dsk.demo.feature.multipart_file;
 
+import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
@@ -30,15 +31,22 @@ public class MultipartFileController {
         return ResponseUtils.ok(multipartFileService.uploadFile(file));
     }
 
-    @GetMapping("/download")
+    @GetMapping("/downloadExcel")
     public ResponseEntity<?> downloadExcel() throws IOException {
-        multipartFileService.createExcelFile();
-        ByteArrayResource resource = new ByteArrayResource(multipartFileService.toByteArray("example.xlsx"));
-//        InputStreamResource inputStream = new InputStreamResource(resource);
+        String fileName ="example.xlsx";
+        InputStreamResource response = multipartFileService.createExcelFile();
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"example.xlsx\"")
-                .body(resource);
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+                .body(response);
+    }
+    @PostMapping("/downloadPdf")
+    public ResponseEntity<?> downloadPdf(String content) throws IOException, DocumentException {
+        String fileName ="example.pdf";
+        InputStreamResource response = multipartFileService.createPdfFile(content);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+                .body(response);
     }
 }
-/*https://github.com/EnggAdda/SpringBootDownloadGetAPIDtaInExcelFile/blob/master/src/main/java/com/example/springbootdownloadexcelfile/controller/ProductController.java*/

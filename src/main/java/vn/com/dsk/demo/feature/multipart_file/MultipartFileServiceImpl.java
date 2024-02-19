@@ -1,11 +1,16 @@
 package vn.com.dsk.demo.feature.multipart_file;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +18,7 @@ import java.io.*;
 
 @Service
 @RequiredArgsConstructor
-public class MultipartFileServiceImpl implements MultipartFileService{
+public class MultipartFileServiceImpl implements MultipartFileService {
 
     private final FileHelper fileHelper;
 
@@ -27,8 +32,10 @@ public class MultipartFileServiceImpl implements MultipartFileService{
                 assert contentType != null;
 
                 return switch (contentType) {
-                    case "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> fileHelper.readDocxContent(inputStream);
-                    case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" -> fileHelper.readExcelContent(inputStream);
+                    case "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ->
+                            fileHelper.readDocxContent(inputStream);
+                    case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ->
+                            fileHelper.readExcelContent(inputStream);
                     case "application/pdf" -> fileHelper.readPdfContent(inputStream);
                     case "text/csv" -> fileHelper.readCsvContent(inputStream);
                     case "text/plain" -> fileHelper.readPlainTextContent(inputStream);
@@ -72,8 +79,8 @@ public class MultipartFileServiceImpl implements MultipartFileService{
     }
 
     @Override
-    public void createExcelFile() throws IOException {
-        try (Workbook workbook = new XSSFWorkbook()) {
+    public InputStreamResource createExcelFile() throws IOException {
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();) {
             Sheet sheet = workbook.createSheet("Sheet 1");
 
             Row headerRow = sheet.createRow(0);
@@ -84,19 +91,21 @@ public class MultipartFileServiceImpl implements MultipartFileService{
             dataRow.createCell(0).setCellValue("Data 1");
             dataRow.createCell(1).setCellValue("Data 2");
 
-            FileOutputStream fileOut = new FileOutputStream("example.xlsx");
-            workbook.write(fileOut);
+            workbook.write(byteArrayOutputStream);
+            return new InputStreamResource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
         }
     }
 
     @Override
-    public byte[] toByteArray(String filePath) throws IOException {
-        File file = new File(filePath);
-        byte[] bytes = new byte[(int) file.length()];
-        try (FileInputStream fis = new FileInputStream(file)) {
-            fis.read(bytes);
+    public InputStreamResource createPdfFile(String content) throws IOException, DocumentException {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            Document document = new Document();
+            PdfWriter.getInstance(document, byteArrayOutputStream);
+            document.open();
+            document.add(new Paragraph("Hello World! This is a PDF file."));
+            document.add(new Paragraph("Content:\n" + content));
+            document.close();
+            return new InputStreamResource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
         }
-        return bytes;
     }
-
 }
