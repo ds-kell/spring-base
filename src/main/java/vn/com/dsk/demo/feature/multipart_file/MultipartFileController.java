@@ -41,12 +41,11 @@ public class MultipartFileController {
                 .body(response);
     }
     @PostMapping("/downloadPdf")
-    public ResponseEntity<?> downloadPdf(String content) throws IOException, DocumentException {
-        String fileName ="example.pdf";
-        InputStreamResource response = multipartFileService.createPdfFile(content);
+    public ResponseEntity<?> downloadPdf(@RequestBody PdfModel model) throws IOException, DocumentException {
+        InputStreamResource response = multipartFileService.createPdfFile(model);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + model.getFileName())
                 .body(response);
     }
 }

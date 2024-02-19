@@ -97,13 +97,14 @@ public class MultipartFileServiceImpl implements MultipartFileService {
     }
 
     @Override
-    public InputStreamResource createPdfFile(String content) throws IOException, DocumentException {
+    public InputStreamResource createPdfFile(PdfModel model) throws IOException, DocumentException {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             Document document = new Document();
             PdfWriter.getInstance(document, byteArrayOutputStream);
             document.open();
             document.add(new Paragraph("Hello World! This is a PDF file."));
-            document.add(new Paragraph("Content:\n" + content));
+            document.add(new Paragraph("Content: " + model.getContent()));
+            document.add(new Paragraph("Author: " + model.getAuthor()));
             document.close();
             return new InputStreamResource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
         }

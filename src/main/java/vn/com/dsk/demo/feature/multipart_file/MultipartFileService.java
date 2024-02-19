@@ -13,6 +13,6 @@ public interface MultipartFileService {
 
     InputStreamResource createExcelFile() throws IOException;
 
-    InputStreamResource createPdfFile(String content) throws IOException, DocumentException;
+    InputStreamResource createPdfFile(PdfModel model) throws IOException, DocumentException;
 
 }
