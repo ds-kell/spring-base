@@ -1,0 +1,124 @@
+`HttpSecurity` trong Spring Security có rất nhiều thuộc tính để cấu hình bảo mật cho ứng dụng web của bạn. Dưới đây là một số thuộc tính quan trọng mà bạn có thể sử dụng để cấu hình `HttpSecurity`:
+
+1. **`authorizeRequests()`**: Phương thức này cho phép bạn cấu hình các quy tắc kiểm tra quyền truy cập cho các yêu cầu HTTP.
+
+   ```java
+   http.authorizeRequests()
+       .antMatchers("/public/**").permitAll()
+       .antMatchers("/private/**").authenticated()
+       .antMatchers("/admin/**").hasRole("ADMIN");
+   ```
+
+2. **`formLogin()`**: Cấu hình trang đăng nhập và quyền truy cập cho trang đăng nhập.
+
+   ```java
+   http.formLogin()
+       .loginPage("/login")
+       .defaultSuccessURL("/dashboard")
+       .permitAll();
+   ```
+
+3. **`httpBasic()`**: Cấu hình xác thực HTTP Basic.
+
+   ```java
+   http.httpBasic()
+       .realmName("My Realm");
+   ```
+
+4. **`csrf()`**: Cấu hình bảo mật CSRF (Cross-Site Request Forgery).
+
+   ```java
+   http.csrf()
+       .disable(); // Tắt CSRF
+   ```
+
+5. **`logout()`**: Cấu hình xử lý đăng xuất.
+
+   ```java
+   http.logout()
+       .logoutUrl("/custom-logout")
+       .logoutSuccessUrl("/goodbye")
+       .invalidateHttpSession(true);
+   ```
+
+6. **`exceptionHandling()`**: Cấu hình xử lý ngoại lệ bảo mật.
+
+   ```java
+   http.exceptionHandling()
+       .accessDeniedPage("/access-denied");
+   ```
+
+7. **`sessionManagement()`**: Cấu hình quản lý phiên làm việc.
+
+   ```java
+   http.sessionManagement()
+       .invalidSessionUrl("/login?invalid=true")
+       .sessionFixation().migrateSession()
+       .maximumSessions(1).expiredUrl("/login?expired=true");
+   ```
+
+8. **`rememberMe()`**: Cấu hình tính năng "Remember Me" (ghi nhớ đăng nhập).
+
+   ```java
+   http.rememberMe()
+       .key("my-remember-me-key")
+       .tokenValiditySeconds(604800);
+   ```
+
+9. **`userDetailsService()`**: Xác định một `UserDetailsService` tùy chỉnh để kiểm tra thông tin đăng nhập của người dùng.
+
+   ```java
+   http.userDetailsService(myCustomUserDetailsService);
+   ```
+
+10. **`addFilterBefore()` và `addFilterAfter()`**: Cho phép bạn thêm bộ lọc tùy chỉnh vào chuỗi lọc trước hoặc sau một bộ lọc cụ thể.
+
+   ```java
+   http.addFilterBefore(myCustomFilter, UsernamePasswordAuthenticationFilter.class);
+   ```
+
+11. **`addFilterAt()`**: Cho phép bạn thêm một bộ lọc tùy chỉnh vào vị trí cụ thể trong chuỗi lọc.
+
+   ```java
+   http.addFilterAt(myCustomFilter, SecurityFilter.class);
+   ```
+
+12. **`cors()`**: Cấu hình bảo mật CORS (Cross-Origin Resource Sharing).
+
+   ```java
+   http.cors();
+   ```
+
+13. **`oauth2Login()`**: Cấu hình xác thực OAuth 2.0.
+
+   ```java
+   http.oauth2Login()
+       .loginPage("/custom-login")
+       .defaultSuccessURL("/dashboard")
+       .permitAll();
+   ```
+
+14. **`oauth2Client()`**: Cấu hình khách OAuth 2.0.
+
+   ```java
+   http.oauth2Client()
+       .authorizationCodeGrant()
+       .addObjectPostProcessor(new OAuth2ObjectPostProcessor());
+   ```
+
+15. **`oauth2ResourceServer()`**: Cấu hình OAuth 2.0 Resource Server.
+
+   ```java
+   http.oauth2ResourceServer()
+       .jwt()
+       .jwkSetUri("https://example.com/jwk-set-uri");
+   ```
+
+16. **`requestCache()`**: Cấu hình bộ nhớ đệm yêu cầu.
+
+   ```java
+   http.requestCache()
+       .requestCache(new HttpSessionRequestCache());
+   ```
+
+Các thuộc tính này cho phép bạn tùy chỉnh và cấu hình bảo mật cho ứng dụng Spring Security của bạn theo cách tùy chỉnh. Bạn có thể chọn các thuộc tính phù hợp với yêu cầu cụ thể của ứng dụng của bạn để đảm bảo tính bảo mật và an toàn.

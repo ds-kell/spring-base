@@ -22,9 +22,9 @@ public class OpenApiConfiguration {
                 .info(new Info().title("REST API")
                         .description("Description of API")
                         .version("1.0").contact(new Contact().name("truyen.nguyentuan")
-                                .email("nguyentruyen103@gmail.com").url("https://twitter.com/Kell30610895"))
+                                .email("truyen.nguyentuan@gmail.com").url(""))
                         .license(new License().name("License of API")
-                                .url("https://twitter.com/Kell30610895")));
+                                .url("")));
     }
 
     private SecurityScheme createAPIKeyScheme() {

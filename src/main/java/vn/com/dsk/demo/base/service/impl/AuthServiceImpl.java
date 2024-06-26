@@ -144,7 +144,6 @@ public class AuthServiceImpl implements AuthService {
         Optional<Account> account = accountRepository.findByEmail(forgotPasswordRequest.getEmail());
         if(account.isPresent()){
             String token = jwtUtils.generateResetPasswordToken(account.get().getUsername());
-            System.out.println(token);
             String url = "http://localhost:8088/api/private/auth/reset-password/?token=" + token;
             return "Password reset email has been sent";
         }

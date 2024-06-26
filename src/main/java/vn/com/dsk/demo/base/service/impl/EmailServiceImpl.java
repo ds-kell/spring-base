@@ -18,6 +18,7 @@ import vn.com.dsk.demo.base.service.EmailService;
 import java.io.File;
 import java.security.SecureRandom;
 import java.util.Objects;
+import java.util.logging.Level;
 
 @Service
 @Slf4j
@@ -54,7 +55,7 @@ public class EmailServiceImpl implements EmailService {
             javaMailSender.send(mailMessage);
         }
         catch (Exception e){
-            e.printStackTrace();
+            log.error("Invalid input: Please enter a valid integer: ", e);
         }
     }
 
@@ -80,7 +81,7 @@ public class EmailServiceImpl implements EmailService {
             javaMailSender.send(mailMessage);
         }
         catch (Exception e){
-            e.printStackTrace();
+            log.error("Invalid input: Please enter a valid integer: ", e);
         }
     }
 

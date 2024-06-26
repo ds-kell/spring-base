@@ -19,15 +19,13 @@ public class SecurityUtils {
     }
 
     private static String extractPrincipal(Authentication authentication) {
-
         if (authentication == null){
             return null;
         } else if (authentication.getPrincipal() instanceof UserDetails userDetails){
             return userDetails.getUsername();
-        } else if (authentication.getPrincipal() instanceof  String){
+        } else if (authentication.getPrincipal() instanceof String str && !str.isEmpty()){
             return (String) authentication.getPrincipal();
         }
-
         return null;
     }
 

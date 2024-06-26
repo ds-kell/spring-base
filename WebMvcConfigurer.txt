@@ -1,0 +1,17 @@
+WebMvcConfigurer được sử dụng bằng cách tạo một lớp triển khai và ghi đè các phương thức của nó để cấu hình Spring MVC theo cách bạn muốn. Dưới đây là một số phương thức quan trọng trong WebMvcConfigurer mà bạn có thể sử dụng:
+
+addViewControllers: Cho phép bạn định nghĩa các view controller mà không cần viết controller class. Điều này hữu ích cho các trang cố định như trang chào mừng.
+
+addResourceHandlers: Cấu hình xử lý các tài nguyên tĩnh (ví dụ: CSS, JavaScript, hình ảnh) và định tuyến chúng tới các vị trí trong ứng dụng.
+
+addInterceptors: Cho phép bạn đăng ký các interceptor để thực hiện các tác vụ trước và sau khi xử lý yêu cầu. Interceptor có thể được sử dụng để kiểm tra quyền truy cập, ghi log, hoặc thực hiện các xử lý khác.
+
+configureViewResolvers: Cấu hình trình giải quyết view (ViewResolver), cho phép bạn sử dụng các công cụ mẫu (template engines) như Thymeleaf, FreeMarker, hoặc JSP.
+
+configureContentNegotiation: Cấu hình xác định kiểu phản hồi dựa trên đối tượng Accept Header trong yêu cầu HTTP.
+
+addFormatters: Đăng ký các định dạng (formatters) để chuyển đổi giữa các kiểu dữ liệu, ví dụ, chuyển đổi một chuỗi thành một đối tượng Date.
+
+configureMessageConverters: Cấu hình trình chuyển đổi thông điệp (MessageConverters) để hỗ trợ gửi và nhận dữ liệu dưới nhiều định dạng như JSON, XML, và thậm chí cả protobuffer.
+
+addArgumentResolvers và addReturnValueHandlers: Cho phép bạn đăng ký các giải quyết tham số và xử lý trả về tùy chỉnh.

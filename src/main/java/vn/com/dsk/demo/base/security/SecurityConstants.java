@@ -9,4 +9,6 @@ public class SecurityConstants {
     public static final long REFRESH_TOKEN_EXPIRATION = 30L * 86400000;
 
     public static final long RESET_TOKEN_EXPIRATION = 1000 * 60 * 5;
+
+    private SecurityConstants(){}
 }
