@@ -26,7 +26,7 @@ public class ExceptionControllerAdvice {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ResponseEntity<Response> EntityNotFoundErrorHandler(EntityNotFoundException e) {
         String errKey = e.getMessage();
-        String errMsg = "Can not find " + e.getEntityName() + " with id: " + e.getEntityId();
+        String errMsg = "Can not find " + e.getEntityName() + " with attribute: " + e.getAttribute();
         log.error(errKey, errMsg);
         return ResponseUtils.badRequest(ErrorResponse.of(errKey, errMsg));
     }

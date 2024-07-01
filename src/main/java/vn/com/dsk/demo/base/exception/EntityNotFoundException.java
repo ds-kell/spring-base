@@ -9,16 +9,16 @@ public class EntityNotFoundException extends RuntimeException {
 
     private String entityName;
 
-    private String entityId;
+    private String attribute;
 
     public EntityNotFoundException() {
         super("error.api.entity-not-found", null);
     }
 
-    public EntityNotFoundException(String entityName, String entityId) {
+    public EntityNotFoundException(String entityName, String attribute) {
         super("error.api.entity-not-found", null);
-        this.entityId = entityId;
         this.entityName = entityName;
+        this.attribute = attribute;
     }
 
 }

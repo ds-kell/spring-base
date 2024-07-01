@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         if (Boolean.TRUE.equals(accountRepository.existsByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail())))
             throw new ServiceException("Email or username is existed in system", "err.api.email-username-is-existed");
         String OTP = generateOTP();
-        redisService.saveToken(OTP, signupRequest, 60);
+        redisService.saveToken(OTP, signupRequest, 300);
         emailService.sendVerifyCode(signupRequest, OTP);
         return "Check your email";
     }
