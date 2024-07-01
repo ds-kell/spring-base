@@ -10,5 +10,5 @@ public interface EmailService {
 
     void sendMailVerify(SignupRequest signupRequest);
 
-    void sendVerifyCode(SignupRequest signupRequest);
+    void sendVerifyCode(SignupRequest signupRequest, String OTP);
 }

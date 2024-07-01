@@ -10,6 +10,8 @@ public interface AuthService {
 
     JwtResponse verifySignUp(VerifySignUp verifySignUp);
 
+    Object verifySignUp(String OTP);
+
     JwtResponse login(LoginRequest loginRequest);
 
     JwtResponse verifyExpiration(String refreshToken);

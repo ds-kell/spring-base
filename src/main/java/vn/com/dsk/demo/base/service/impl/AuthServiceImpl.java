@@ -27,7 +27,9 @@ import vn.com.dsk.demo.base.security.impl.UserDetailsServiceImpl;
 import vn.com.dsk.demo.base.security.jwt.JwtUtils;
 import vn.com.dsk.demo.base.service.AuthService;
 import vn.com.dsk.demo.base.service.EmailService;
+import vn.com.dsk.demo.base.service.RedisService;
 
+import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -55,18 +57,22 @@ public class AuthServiceImpl implements AuthService {
 
     private final EmailService emailService;
 
+    private final RedisService redisService;
+
     @Override
     @Transactional
     public String signup(SignupRequest signupRequest) {
-        if (accountRepository.existsByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail()))
+        if (Boolean.TRUE.equals(accountRepository.existsByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail())))
             throw new ServiceException("Email or username is existed in system", "err.api.email-username-is-existed");
-        emailService.sendVerifyCode(signupRequest);
+        String OTP = generateOTP();
+        redisService.saveToken(OTP, signupRequest, 60);
+        emailService.sendVerifyCode(signupRequest, OTP);
         return "Check your email";
     }
 
     @Override
     public JwtResponse verifySignUp(VerifySignUp verifySignUp) {
-        if(verifySignUp.getVerifyCode().equals("")){
+        if(verifySignUp.getVerifyCode().isEmpty()){
             throw new ServiceException("Verification code is incorrect", "err.api.verifyCode-incorrect");
         }
         Account user = new Account();
@@ -92,6 +98,39 @@ public class AuthServiceImpl implements AuthService {
         } catch (DataAccessException e) {
             log.error("Error saving user to the database", e);
             throw new ServiceException("Failed to add user", "err.api.failed-to-add-user");
+        }
+    }
+
+    @Override
+    public Object verifySignUp(String OTP) {
+        SignupRequest signupRequest = redisService.validateToken(OTP);
+        if(signupRequest != null){
+            Account user = new Account();
+            user.setUsername(signupRequest.getUsername());
+            user.setEmail(signupRequest.getEmail());
+            user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+            user.setIsActive(1);
+            Set<String> listAuthority = signupRequest.getAuthorities();
+            Set<Authority> authorities = new HashSet<>();
+
+            if (listAuthority != null && !listAuthority.isEmpty()) {
+                listAuthority.forEach(permission -> authorities.add(authorityRepository.findByName(permission).orElseThrow(() -> new EntityNotFoundException(AuthorityRepository.class.getName(), permission))));
+            }
+            user.setAuthorities(authorities);
+            try {
+                accountRepository.save(user);
+                return new JwtResponse(
+                        jwtUtils.generateAccessToken(signupRequest.getUsername()),
+                        jwtUtils.generateRefreshToken(signupRequest.getUsername()),
+                        "Bearer",
+                        signupRequest.getUsername(),
+                        listAuthority != null ? listAuthority.stream().toList() : null);
+            } catch (DataAccessException e) {
+                log.error("Error saving user to the database", e);
+                throw new ServiceException("Failed to add user", "err.api.failed-to-add-user");
+            }
+        } else {
+            return "OTP incorrect";
         }
     }
 
@@ -125,7 +164,7 @@ public class AuthServiceImpl implements AuthService {
         if (StringUtils.hasText(refreshToken) && refreshToken.startsWith("Bearer ")) {
             token = refreshToken.split(space)[1];
         }
-        if (jwtUtils.validateToken(token)) {
+        if (Boolean.TRUE.equals(jwtUtils.validateToken(token))) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(jwtUtils.extractUsername(token));
             List<String> authorities = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
             return new JwtResponse(
@@ -155,6 +194,20 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JwtResponse changePassword(ChangePasswordRequest changePasswordRequest) {
         return null;
+    }
+
+    private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    private String generateOTP() {
+        StringBuilder otp = new StringBuilder();
+        SecureRandom random = new SecureRandom();
+
+        for (int i = 0; i < 6; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            char randomChar = CHARACTERS.charAt(randomIndex);
+            otp.append(randomChar);
+        }
+        return otp.toString();
     }
 }
 

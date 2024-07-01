@@ -32,6 +32,11 @@ public class AuthController {
         return ResponseUtils.ok(authService.verifySignUp(verifySignUp));
     }
 
+    @PostMapping("public/auth/verify-otp")
+    public ResponseEntity<Response> verifySignUp(@Valid @RequestParam  String OTP) {
+        return ResponseUtils.ok(authService.verifySignUp(OTP));
+    }
+
     @GetMapping("private/auth/refresh-token")
     public ResponseEntity<Response> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String refreshToken) {
         return ResponseUtils.ok("verified", authService.verifyExpiration(refreshToken));

@@ -60,7 +60,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendVerifyCode(SignupRequest signupRequest) {
+    public void sendVerifyCode(SignupRequest signupRequest, String OTP) {
         String senderName = "DFS Company";
         String subject = "DSF - Verify your email";
 
@@ -69,7 +69,7 @@ public class EmailServiceImpl implements EmailService {
 
         String content = "Dear " + signupRequest.getUsername()
                 + "\nYour verify code:\n"
-                + generateOTP()
+                + OTP
                 + "\nThank you.";
 
         try {
@@ -120,19 +120,5 @@ public class EmailServiceImpl implements EmailService {
         } catch (MessagingException e) {
             return "Error while sending mail!!!";
         }
-    }
-
-    private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-    private String generateOTP() {
-        StringBuilder otp = new StringBuilder();
-        SecureRandom random = new SecureRandom();
-
-        for (int i = 0; i < 6; i++) {
-            int randomIndex = random.nextInt(CHARACTERS.length());
-            char randomChar = CHARACTERS.charAt(randomIndex);
-            otp.append(randomChar);
-        }
-        return otp.toString();
     }
 }

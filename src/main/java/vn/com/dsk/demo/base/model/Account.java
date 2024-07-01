@@ -24,22 +24,19 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "username", nullable = false)
     @NotBlank(message = "*Please provide an username")
     private String username;
-
     @Column(name = "email", nullable = false)
     @Email(message = "*Please provide a valid Email")
     @NotBlank(message = "*Please provide an email")
     private String email;
-
-    @JsonIgnore
-    @Length(min = 3, message = "*Your password must have at least 3 characters")
-    @NotBlank(message = "*Please provide your password")
-    @Column(name = "password", nullable = false)
-    private String password;
-
+//    @JsonIgnore
+//    @Column(name = "hashed_password", nullable = false)
+//    private String hashedPassword;
+//    @JsonIgnore
+//    @Column(name = "personal_hashed_code", nullable = false)
+//    private String personalHashedCode;
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -47,4 +44,12 @@ public class Account {
             joinColumns = @JoinColumn(name = "account_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private Set<Authority> authorities = new HashSet<>();
+    @Column(name = "is_active")
+    @JsonIgnore
+    private int isActive = 0;
+    @JsonIgnore
+    @Length(min = 3, message = "*Your password must have at least 3 characters")
+    @NotBlank(message = "*Please provide your password")
+    @Column(name = "password", nullable = false)
+    private String password;
 }
