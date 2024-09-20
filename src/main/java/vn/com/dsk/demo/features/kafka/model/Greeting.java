@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.features.kafka.config;
+package vn.com.dsk.demo.features.kafka.model;
 
 import lombok.Getter;
 import lombok.Setter;

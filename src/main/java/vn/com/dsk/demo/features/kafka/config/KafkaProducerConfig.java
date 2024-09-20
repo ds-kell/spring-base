@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+import vn.com.dsk.demo.features.kafka.model.Greeting;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +54,11 @@ public class KafkaProducerConfig {
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        configProps.put(JsonSerializer.TYPE_MAPPINGS, "greeting:vn.com.dsk.demo.features.kafka.config.Greeting, farewell:vn.com.dsk.demo.features.kafka.config.Farewell");
+        configProps.put(JsonSerializer.TYPE_MAPPINGS,
+                "greeting:vn.com.dsk.demo.features.kafka.model.Greeting, " +
+                "farewell:vn.com.dsk.demo.features.kafka.model.Farewell" +
+                "chatContent:vn.com.dsk.demo.features.kafka.model.ChatContent"
+        );
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 

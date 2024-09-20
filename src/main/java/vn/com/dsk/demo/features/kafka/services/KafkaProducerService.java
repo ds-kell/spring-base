@@ -1,9 +1,9 @@
-package vn.com.dsk.demo.features.kafka.demo;
+package vn.com.dsk.demo.features.kafka.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import vn.com.dsk.demo.features.kafka.config.Greeting;
+import vn.com.dsk.demo.features.kafka.model.Greeting;
 
 @Service
 public class KafkaProducerService {

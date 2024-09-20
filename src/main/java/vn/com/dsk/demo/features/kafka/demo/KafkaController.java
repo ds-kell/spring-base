@@ -2,7 +2,8 @@ package vn.com.dsk.demo.features.kafka.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import vn.com.dsk.demo.features.kafka.config.Greeting;
+import vn.com.dsk.demo.features.kafka.model.Greeting;
+import vn.com.dsk.demo.features.kafka.services.KafkaProducerService;
 
 @RestController
 @RequestMapping("/kafka")

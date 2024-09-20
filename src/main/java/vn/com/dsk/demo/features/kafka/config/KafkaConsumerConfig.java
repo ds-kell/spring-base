@@ -14,6 +14,8 @@ import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 import org.springframework.kafka.support.mapping.DefaultJackson2JavaTypeMapper;
 import org.springframework.kafka.support.mapping.Jackson2JavaTypeMapper;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import vn.com.dsk.demo.features.kafka.model.Farewell;
+import vn.com.dsk.demo.features.kafka.model.Greeting;
 
 import java.util.HashMap;
 import java.util.Map;
