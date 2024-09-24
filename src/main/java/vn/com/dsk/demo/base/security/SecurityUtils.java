@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.base.infrastructure.security;
+package vn.com.dsk.demo.base.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

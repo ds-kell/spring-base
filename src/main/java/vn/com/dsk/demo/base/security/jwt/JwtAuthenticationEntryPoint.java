@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.base.infrastructure.security.jwt;
+package vn.com.dsk.demo.base.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.base.infrastructure.security;
+package vn.com.dsk.demo.base.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -10,8 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import vn.com.dsk.demo.base.infrastructure.security.jwt.JwtAuthenticationEntryPoint;
-import vn.com.dsk.demo.base.infrastructure.security.jwt.JwtAuthenticationFilter;
+import vn.com.dsk.demo.base.security.jwt.JwtAuthenticationEntryPoint;
+import vn.com.dsk.demo.base.security.jwt.JwtAuthenticationFilter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 

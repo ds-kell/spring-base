@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.base.infrastructure.security.jwt;
+package vn.com.dsk.demo.base.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

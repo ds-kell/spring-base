@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.base.infrastructure.security.impl;
+package vn.com.dsk.demo.base.security.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

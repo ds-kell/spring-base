@@ -12,7 +12,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import vn.com.dsk.demo.base.adapter.dto.request.SignupRequest;
 import vn.com.dsk.demo.base.domain.entities.EmailDetails;
-import vn.com.dsk.demo.base.infrastructure.security.jwt.JwtUtils;
+import vn.com.dsk.demo.base.security.jwt.JwtUtils;
 import vn.com.dsk.demo.base.application.services.EmailService;
 
 import java.io.File;

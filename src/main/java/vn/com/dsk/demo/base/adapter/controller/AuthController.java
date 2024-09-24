@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.com.dsk.demo.base.adapter.dto.request.*;
 import vn.com.dsk.demo.base.application.services.AuthService;
-import vn.com.dsk.demo.base.shared.utils.response.Response;
-import vn.com.dsk.demo.base.shared.utils.response.ResponseUtils;
+import vn.com.dsk.demo.base.adapter.wrappers.Response;
+import vn.com.dsk.demo.base.adapter.wrappers.ResponseUtils;
 
 @RequiredArgsConstructor
 @RestController

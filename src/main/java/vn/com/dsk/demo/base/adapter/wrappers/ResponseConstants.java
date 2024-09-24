@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.base.shared.utils.response;
+package vn.com.dsk.demo.base.adapter.wrappers;
 
 public class ResponseConstants {
     private ResponseConstants() {}

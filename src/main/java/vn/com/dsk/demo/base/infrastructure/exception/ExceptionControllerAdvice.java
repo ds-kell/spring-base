@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import vn.com.dsk.demo.base.shared.utils.response.ErrorResponse;
-import vn.com.dsk.demo.base.shared.utils.response.Response;
-import vn.com.dsk.demo.base.shared.utils.response.ResponseUtils;
+import vn.com.dsk.demo.base.adapter.wrappers.ErrorResponse;
+import vn.com.dsk.demo.base.adapter.wrappers.Response;
+import vn.com.dsk.demo.base.adapter.wrappers.ResponseUtils;
 
 
 @Slf4j

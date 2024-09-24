@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.base.shared.utils.response;
+package vn.com.dsk.demo.base.adapter.wrappers;
 
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;

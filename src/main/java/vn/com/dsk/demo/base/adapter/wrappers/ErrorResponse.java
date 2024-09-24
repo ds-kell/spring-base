@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.base.shared.utils.response;
+package vn.com.dsk.demo.base.adapter.wrappers;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

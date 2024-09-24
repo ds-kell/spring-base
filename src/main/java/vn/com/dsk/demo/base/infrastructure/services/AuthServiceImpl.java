@@ -26,8 +26,8 @@ import vn.com.dsk.demo.base.domain.entities.Authority;
 import vn.com.dsk.demo.base.infrastructure.repository.AccountRepository;
 import vn.com.dsk.demo.base.infrastructure.repository.AuthorityRepository;
 import vn.com.dsk.demo.base.infrastructure.repository.PasswordResetTokenRepository;
-import vn.com.dsk.demo.base.infrastructure.security.impl.UserDetailsServiceImpl;
-import vn.com.dsk.demo.base.infrastructure.security.jwt.JwtUtils;
+import vn.com.dsk.demo.base.security.impl.UserDetailsServiceImpl;
+import vn.com.dsk.demo.base.security.jwt.JwtUtils;
 import vn.com.dsk.demo.base.application.services.AuthService;
 import vn.com.dsk.demo.base.application.services.EmailService;
 

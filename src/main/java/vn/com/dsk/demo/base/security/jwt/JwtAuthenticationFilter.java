@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.base.infrastructure.security.jwt;
+package vn.com.dsk.demo.base.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import vn.com.dsk.demo.base.infrastructure.security.impl.UserDetailsServiceImpl;
+import vn.com.dsk.demo.base.security.impl.UserDetailsServiceImpl;
 
 import java.io.IOException;
 
