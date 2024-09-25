@@ -23,8 +23,8 @@ public class SecurityUtils {
             return null;
         } else if (authentication.getPrincipal() instanceof UserDetails userDetails){
             return userDetails.getUsername();
-        } else if (authentication.getPrincipal() instanceof String str && !str.isEmpty()){
-            return (String) authentication.getPrincipal();
+        } else if (authentication.getPrincipal() instanceof String principal && !principal.isEmpty()){
+            return principal;
         }
         return null;
     }
