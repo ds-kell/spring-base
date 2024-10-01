@@ -39,6 +39,7 @@ public class SecurityConfiguration {
             "/swagger-ui/**",
             "/webjars/**",
             "/swagger-ui.html"};
+
     @Bean
     public SecurityFilterChain defaultFilterChain(HttpSecurity http) throws Exception {
         http.cors(AbstractHttpConfigurer::disable)
@@ -48,7 +49,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL).permitAll()
                                 .requestMatchers("api/public/**").permitAll()
-                                .requestMatchers("ws/**").permitAll()
+                                .requestMatchers("/ws/**").permitAll()
+                                .requestMatchers("/chat/**").permitAll()
                                 .requestMatchers("api/private/**").authenticated()
                                 .requestMatchers("api/admin/**").hasRole("ADMIN")
                                 .anyRequest().permitAll()
