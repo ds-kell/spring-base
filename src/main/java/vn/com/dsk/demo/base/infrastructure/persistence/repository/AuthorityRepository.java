@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.base.infrastructure.repository;
+package vn.com.dsk.demo.base.infrastructure.persistence.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import vn.com.dsk.demo.base.domain.entities.Authority;

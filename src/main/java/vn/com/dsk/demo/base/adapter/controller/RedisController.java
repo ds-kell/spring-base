@@ -2,14 +2,14 @@ package vn.com.dsk.demo.base.adapter.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import vn.com.dsk.demo.base.application.services.OTPService;
+import vn.com.dsk.demo.base.application.services.RedisService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/public/")
 public class RedisController {
 
-    private final OTPService.RedisService redisService;
+    private final RedisService redisService;
 
     @PostMapping("/generate")
     public String generateToken(@RequestParam String userData) {

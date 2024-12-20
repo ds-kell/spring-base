@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import vn.com.dsk.demo.base.domain.entities.Account;
-import vn.com.dsk.demo.base.infrastructure.repository.AccountRepository;
+import vn.com.dsk.demo.base.infrastructure.persistence.repository.AccountJpaRepository;
 
 import java.util.Optional;
 import java.util.Set;
@@ -20,14 +20,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final AccountRepository accountRepository;
+    private final AccountJpaRepository accountJpaRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Account> account = new EmailValidator().isValid(username, null)
-                ? accountRepository.findOneWithAuthoritiesByEmail(username)
-                : accountRepository.findOneWithAuthoritiesByUsername(username);
+                ? accountJpaRepository.findOneWithAuthoritiesByEmail(username)
+                : accountJpaRepository.findOneWithAuthoritiesByUsername(username);
 
         return account
                 .map(this::createUserSecurity)

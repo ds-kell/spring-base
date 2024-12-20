@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class VerifySignUp {
+public class VerifyRegisterInfo {
     @NotBlank
     @Size(min = 5, max = 20)
     private String username;

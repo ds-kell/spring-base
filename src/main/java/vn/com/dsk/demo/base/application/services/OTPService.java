@@ -1,23 +1,30 @@
 package vn.com.dsk.demo.base.application.services;
 
-import vn.com.dsk.demo.base.adapter.dto.request.SignupRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
 
-public interface OTPService {
+@Service
+@RequiredArgsConstructor
+public class OTPService {
 
-    String generateOTP();
+    private final StringRedisTemplate redisTemplate;
 
-    boolean verifyOTP(String phoneNumber, String otpCode);
+    private static final String OTP_PREFIX = "otp:";
+    private static final String RATE_LIMIT_PREFIX = "rate_limit:";
+    private static final int RATE_LIMIT = 5;
+    private static final long RATE_LIMIT_PERIOD_SECONDS = 60;
+    private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    boolean isRateLimited(String rateLimitKey);
+    public String generateOTP() {
+       return null;
+    }
 
-    interface RedisService {
+    public boolean verifyOTP(String phoneNumber, String otpCode) {
+        return false;
+    }
 
-        void saveToken(String token, String userData, long duration);
-
-        void saveToken(String token, SignupRequest signupRequest, long duration);
-
-        SignupRequest validateToken(String token);
-
-        void revokeToken(String token);
+    public boolean isRateLimited(String rateLimitKey) {
+        return false;
     }
 }

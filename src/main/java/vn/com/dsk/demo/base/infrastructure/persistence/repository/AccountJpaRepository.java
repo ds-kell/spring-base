@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.base.infrastructure.repository;
+package vn.com.dsk.demo.base.infrastructure.persistence.repository;
 
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -7,7 +7,7 @@ import vn.com.dsk.demo.base.domain.entities.Account;
 
 import java.util.Optional;
 
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface AccountJpaRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByUsername(String username);
 
     Optional<Account> findByEmail(String email);

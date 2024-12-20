@@ -9,6 +9,9 @@ import vn.com.dsk.demo.base.adapter.dto.request.*;
 import vn.com.dsk.demo.base.application.services.AuthService;
 import vn.com.dsk.demo.base.adapter.wrappers.Response;
 import vn.com.dsk.demo.base.adapter.wrappers.ResponseUtils;
+import vn.com.dsk.demo.base.application.usecases.LoginUseCase;
+import vn.com.dsk.demo.base.application.usecases.PreRegisterUseCase;
+import vn.com.dsk.demo.base.application.usecases.VerifyRegisterUseCase;
 
 @RequiredArgsConstructor
 @RestController
@@ -17,19 +20,25 @@ public class AuthController {
 
     private final AuthService authService;
 
+    private final PreRegisterUseCase preRegisterUseCase;
+
+    private final VerifyRegisterUseCase verifyRegisterUseCase;
+
+    private final LoginUseCase loginUseCase;
+
     @PostMapping("public/auth/login")
     public ResponseEntity<Response> authenticateAccount(@Valid @RequestBody LoginRequest loginRequest) {
-        return ResponseUtils.ok(authService.login(loginRequest));
+        return ResponseUtils.ok(loginUseCase.execute(loginRequest));
     }
 
-    @PostMapping("public/auth/signup")
-    public ResponseEntity<Response> registerAccount(@Valid @RequestBody SignupRequest signupRequest) {
-        return ResponseUtils.ok(authService.signup(signupRequest));
+    @PostMapping("public/auth/pre-register")
+    public ResponseEntity<Response> registerAccount(@Valid @RequestBody RegisterInfo registerInfo) {
+        return ResponseUtils.ok(preRegisterUseCase.execute(registerInfo));
     }
 
-    @PostMapping("public/auth/verify-signup")
-    public ResponseEntity<Response> verifySignUp(@Valid @RequestBody VerifySignUp verifySignUp) {
-        return ResponseUtils.ok(authService.verifySignUp(verifySignUp));
+    @PostMapping("public/auth/verify-register")
+    public ResponseEntity<Response> verifySignUp(@Valid @RequestBody VerifyRegisterInfo verifyRegisterInfo) {
+        return ResponseUtils.ok(verifyRegisterUseCase.execute(verifyRegisterInfo));
     }
 
     @PostMapping("public/auth/verify-otp")
