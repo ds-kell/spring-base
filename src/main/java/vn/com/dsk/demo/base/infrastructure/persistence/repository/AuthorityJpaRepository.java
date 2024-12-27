@@ -5,7 +5,7 @@ import vn.com.dsk.demo.base.domain.entities.Authority;
 
 import java.util.Optional;
 
-public interface AuthorityRepository extends JpaRepository<Authority, Long> {
+public interface AuthorityJpaRepository extends JpaRepository<Authority, Long> {
 
     Optional<Authority> findByName(String name);
 }

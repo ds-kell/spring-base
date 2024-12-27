@@ -3,6 +3,7 @@ package vn.com.dsk.demo.base.application.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,13 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import vn.com.dsk.demo.base.adapter.dto.request.*;
 import vn.com.dsk.demo.base.adapter.dto.response.JwtResponse;
+import vn.com.dsk.demo.base.adapter.wrappers.Response;
+import vn.com.dsk.demo.base.adapter.wrappers.ResponseUtils;
 import vn.com.dsk.demo.base.infrastructure.exception.EntityNotFoundException;
 import vn.com.dsk.demo.base.infrastructure.exception.ServiceException;
 import vn.com.dsk.demo.base.domain.entities.Account;
 import vn.com.dsk.demo.base.domain.entities.Authority;
 import vn.com.dsk.demo.base.infrastructure.persistence.repository.AccountJpaRepository;
-import vn.com.dsk.demo.base.infrastructure.persistence.repository.AuthorityRepository;
-import vn.com.dsk.demo.base.infrastructure.persistence.repository.PasswordResetTokenRepository;
+import vn.com.dsk.demo.base.infrastructure.persistence.repository.AuthorityJpaRepository;
+import vn.com.dsk.demo.base.infrastructure.persistence.repository.PasswordResetTokenJpaRepository;
 import vn.com.dsk.demo.base.security.impl.UserDetailsServiceImpl;
 import vn.com.dsk.demo.base.security.jwt.JwtUtils;
 
@@ -38,7 +41,7 @@ public class AuthService {
 
     private final AccountJpaRepository accountJpaRepository;
 
-    private final AuthorityRepository authorityRepository;
+    private final AuthorityJpaRepository authorityJpaRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -46,7 +49,7 @@ public class AuthService {
 
     private final AuthenticationManager authenticationManager;
 
-    private final PasswordResetTokenRepository passwordResetTokenRepository;
+    private final PasswordResetTokenJpaRepository passwordResetTokenJpaRepository;
 
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -62,7 +65,7 @@ public class AuthService {
     public Set<Authority> getPermissionByName(Set<String> listName) {
         Set<Authority> authorities = new HashSet<>();
         listName.forEach(permission -> authorities.add(
-                authorityRepository.findByName(permission).orElseThrow(() -> new EntityNotFoundException(AuthorityRepository.class.getName(), permission))));
+                authorityJpaRepository.findByName(permission).orElseThrow(() -> new EntityNotFoundException(AuthorityJpaRepository.class.getName(), permission))));
         return authorities;
     }
 
@@ -87,8 +90,8 @@ public class AuthService {
             Set<Authority> authorities = new HashSet<>();
 
             if (listAuthority != null && !listAuthority.isEmpty()) {
-                listAuthority.forEach(permission -> authorities.add(authorityRepository.findByName(permission)
-                        .orElseThrow(() -> new EntityNotFoundException(AuthorityRepository.class.getName(), permission))));
+                listAuthority.forEach(permission -> authorities.add(authorityJpaRepository.findByName(permission)
+                        .orElseThrow(() -> new EntityNotFoundException(AuthorityJpaRepository.class.getName(), permission))));
             }
             user.setAuthorities(authorities);
             try {
@@ -105,17 +108,18 @@ public class AuthService {
     }
 
     @Transactional
-    public JwtResponse login(LoginRequest loginRequest) {
+    public ResponseEntity<Response> login(LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             List<String> authorities = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-            return new JwtResponse(jwtUtils.generateAccessToken(userDetails), jwtUtils.generateRefreshToken(userDetails), "Bearer", userDetails.getUsername(),
-                    authorities);
-
-        } catch (AuthenticationException authenticationException) {
-            throw new ServiceException("Username or password is invalid", "err.authorize.unauthorized");
+            return ResponseUtils.ok(200, "success", new JwtResponse(jwtUtils.generateAccessToken(userDetails), jwtUtils.generateRefreshToken(userDetails), "Bearer", userDetails.getUsername(),
+                    authorities));
+        } catch (AuthenticationException exception) {
+//            throw new ServiceException("Username or password is invalid", "err.authorize.unauthorized");
+            log.error(exception.getMessage());
+            return ResponseUtils.ok(500, "Username or password is invalid", exception);
         }
     }
 

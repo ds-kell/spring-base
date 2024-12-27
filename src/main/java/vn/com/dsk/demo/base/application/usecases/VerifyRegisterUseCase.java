@@ -18,8 +18,8 @@ import vn.com.dsk.demo.base.security.jwt.JwtUtils;
 
 import java.util.Objects;
 import java.util.Set;
-@Service
 
+@Service
 @Slf4j
 public class VerifyRegisterUseCase implements UseCase<Object, VerifyRegisterInfo> {
 
@@ -31,7 +31,6 @@ public class VerifyRegisterUseCase implements UseCase<Object, VerifyRegisterInfo
 
     private JwtUtils jwtUtils;
 
-    @Autowired
     public VerifyRegisterUseCase(AuthService authService, RedisService redisService, EmailService emailService) {
         this.authService = authService;
         this.redisService = redisService;
@@ -40,7 +39,7 @@ public class VerifyRegisterUseCase implements UseCase<Object, VerifyRegisterInfo
     @Override
     public Object execute(VerifyRegisterInfo verifyRegisterInfo) {
         RegisterInfo registerInfo = redisService.getRegisterInfoByToken(verifyRegisterInfo.getVerifyCode() + verifyRegisterInfo.getUsername());
-        if(!Objects.isNull(registerInfo) && compareInfo(registerInfo, verifyRegisterInfo)){
+        if (!Objects.isNull(registerInfo) && compareInfo(registerInfo, verifyRegisterInfo)) {
             try {
                 Account account = new Account();
                 account.setUsername(registerInfo.getUsername());
@@ -67,7 +66,7 @@ public class VerifyRegisterUseCase implements UseCase<Object, VerifyRegisterInfo
         }
     }
 
-    private boolean compareInfo(RegisterInfo registerInfo, VerifyRegisterInfo verifyRegisterInfo){
+    private boolean compareInfo(RegisterInfo registerInfo, VerifyRegisterInfo verifyRegisterInfo) {
         return registerInfo.getEmail().equals(verifyRegisterInfo.getEmail())
                 && registerInfo.getUsername().equals(verifyRegisterInfo.getUsername())
                 && registerInfo.getPassword().equals(verifyRegisterInfo.getPassword())

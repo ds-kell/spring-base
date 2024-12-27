@@ -76,7 +76,7 @@ public class EmailService {
             javaMailSender.send(mailMessage);
         }
         catch (Exception e){
-            log.error("Invalid input: Please enter a valid integer: ", e);
+            log.error("Can not send mail", e);
         }
     }
 

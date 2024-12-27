@@ -1,6 +1,7 @@
 package vn.com.dsk.demo.base.application.usecases;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.com.dsk.demo.base.adapter.dto.request.RegisterInfo;
@@ -12,6 +13,7 @@ import vn.com.dsk.demo.base.infrastructure.exception.ServiceException;
 import java.security.SecureRandom;
 
 import static vn.com.dsk.demo.base.shared.constants.Constants.CHARACTERS;
+@Slf4j
 @Service
 public class PreRegisterUseCase implements UseCase<String, RegisterInfo>{
 
@@ -21,7 +23,6 @@ public class PreRegisterUseCase implements UseCase<String, RegisterInfo>{
 
     private final EmailService emailService;
 
-    @Autowired
     public PreRegisterUseCase(AuthService authService, RedisService redisService, EmailService emailService) {
         this.authService = authService;
         this.emailService= emailService;
@@ -39,8 +40,18 @@ public class PreRegisterUseCase implements UseCase<String, RegisterInfo>{
 //        }
         // sendOTP
         String OTP = generateOTP();
-        redisService.saveToken(OTP + registerInfo.getUsername(), registerInfo, 300);
-        emailService.sendVerifyCode(registerInfo, OTP);
+        try {
+            redisService.saveToken(OTP + registerInfo.getUsername(), registerInfo, 300);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return "RedisService is not responding";
+        }
+        try {
+            emailService.sendVerifyCode(registerInfo, OTP);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return "The server is busy and cannot send email. Please try again later.";
+        }
         return "Check your email";
     }
 

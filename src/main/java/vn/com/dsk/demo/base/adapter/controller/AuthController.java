@@ -14,6 +14,10 @@ import vn.com.dsk.demo.base.application.usecases.PreRegisterUseCase;
 import vn.com.dsk.demo.base.application.usecases.VerifyRegisterUseCase;
 
 @RequiredArgsConstructor
+/*    Tự động tạo một constructor cho tất cả các biến instance:
+      - Có từ khóa `final`.
+      - Hoặc có annotation `@NonNull`.
+      */
 @RestController
 @RequestMapping("/api/")
 public class AuthController {
@@ -24,11 +28,11 @@ public class AuthController {
 
     private final VerifyRegisterUseCase verifyRegisterUseCase;
 
-    private final LoginUseCase loginUseCase;
+    private final LoginUseCase loginUseCase ;
 
     @PostMapping("public/auth/login")
     public ResponseEntity<Response> authenticateAccount(@Valid @RequestBody LoginRequest loginRequest) {
-        return ResponseUtils.ok(loginUseCase.execute(loginRequest));
+        return loginUseCase.execute(loginRequest);
     }
 
     @PostMapping("public/auth/pre-register")

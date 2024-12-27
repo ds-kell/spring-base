@@ -1,4 +1,4 @@
-package vn.com.dsk.demo.base.infrastructure.persistence.repository;
+package vn.com.dsk.demo.base.infrastructure.persistence.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
