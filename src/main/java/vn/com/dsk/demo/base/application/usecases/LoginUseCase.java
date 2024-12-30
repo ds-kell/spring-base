@@ -1,13 +1,12 @@
 package vn.com.dsk.demo.base.application.usecases;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import vn.com.dsk.demo.base.adapter.dto.request.LoginRequest;
-import vn.com.dsk.demo.base.adapter.wrappers.Response;
+import vn.com.dsk.demo.base.adapter.dto.response.JwtResponse;
 import vn.com.dsk.demo.base.application.services.AuthService;
 
 @Service
-public class LoginUseCase implements UseCase<ResponseEntity<Response> , LoginRequest> {
+public class LoginUseCase implements UseCase<JwtResponse , LoginRequest> {
 
     private final AuthService authService;
 
@@ -16,7 +15,7 @@ public class LoginUseCase implements UseCase<ResponseEntity<Response> , LoginReq
     }
 
     @Override
-    public ResponseEntity<Response> execute(LoginRequest loginRequest) {
+    public JwtResponse execute(LoginRequest loginRequest) {
         return authService.login(loginRequest);
     }
 }

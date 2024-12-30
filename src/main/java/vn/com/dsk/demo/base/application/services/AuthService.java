@@ -108,19 +108,13 @@ public class AuthService {
     }
 
     @Transactional
-    public ResponseEntity<Response> login(LoginRequest loginRequest) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            List<String> authorities = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-            return ResponseUtils.ok(200, "success", new JwtResponse(jwtUtils.generateAccessToken(userDetails), jwtUtils.generateRefreshToken(userDetails), "Bearer", userDetails.getUsername(),
-                    authorities));
-        } catch (AuthenticationException exception) {
-//            throw new ServiceException("Username or password is invalid", "err.authorize.unauthorized");
-            log.error(exception.getMessage());
-            return ResponseUtils.ok(500, "Username or password is invalid", exception);
-        }
+    public JwtResponse login(LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<String> authorities = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+        return new JwtResponse(jwtUtils.generateAccessToken(userDetails), jwtUtils.generateRefreshToken(userDetails), "Bearer", userDetails.getUsername(),
+                authorities);
     }
 
     public JwtResponse verifyExpiration(String refreshToken) {

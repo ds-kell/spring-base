@@ -16,7 +16,7 @@ import vn.com.dsk.demo.base.security.impl.UserDetailsServiceImpl;
 
 @Configuration
 @RequiredArgsConstructor
-public class ApplicationConfiguration {
+public class AuthenConfiguration {
 
     private final UserDetailsServiceImpl userDetailsService;
 

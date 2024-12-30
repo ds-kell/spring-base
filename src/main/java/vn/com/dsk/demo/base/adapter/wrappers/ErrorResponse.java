@@ -2,22 +2,27 @@ package vn.com.dsk.demo.base.adapter.wrappers;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
+import lombok.*;
+import vn.com.dsk.demo.base.shared.constants.HttpStatusCode;
 
-@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ErrorResponse extends Response {
-    
-    private final String errKey;
+public class ErrorResponse {
 
-    public ErrorResponse(String errKey, String message) {
-        this.errKey = errKey;
-        this.message = message;
-    }
+    @Builder.Default
+    protected HttpStatusCode statusCode = null;
 
-    public static ErrorResponse of(String errKey, String details) {
-        return new ErrorResponse(errKey, details);
+    protected String message = null;
+
+    public static ErrorResponse of (HttpStatusCode statusCode, String message) {
+        return ErrorResponse.builder()
+                .statusCode(statusCode)
+                .message(message)
+                .build();
     }
 
 }

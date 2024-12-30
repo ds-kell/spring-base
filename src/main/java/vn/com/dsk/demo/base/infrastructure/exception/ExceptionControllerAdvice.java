@@ -2,14 +2,15 @@ package vn.com.dsk.demo.base.infrastructure.exception;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import vn.com.dsk.demo.base.adapter.wrappers.ErrorResponse;
-import vn.com.dsk.demo.base.adapter.wrappers.Response;
 import vn.com.dsk.demo.base.adapter.wrappers.ResponseUtils;
+import vn.com.dsk.demo.base.shared.constants.HttpStatusCode;
+
+import java.io.FileNotFoundException;
 
 
 @Slf4j
@@ -17,17 +18,19 @@ import vn.com.dsk.demo.base.adapter.wrappers.ResponseUtils;
 public class ExceptionControllerAdvice {
 
     @ExceptionHandler({Exception.class})
-    public ResponseEntity<Response> exceptionHandler(Exception e) {
-        log.error("Exception", e);
-        return ResponseUtils.internalErr(ErrorResponse.of(e.getCause().getMessage(), e.getMessage()));
-    }
-
-    @ExceptionHandler({EntityNotFoundException.class})
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ResponseEntity<Response> EntityNotFoundErrorHandler(EntityNotFoundException e) {
-        String errKey = e.getMessage();
-        String errMsg = "Can not find " + e.getEntityName() + " with attribute: " + e.getAttribute();
-        log.error(errKey, errMsg);
-        return ResponseUtils.badRequest(ErrorResponse.of(errKey, errMsg));
+    public ResponseEntity<ErrorResponse> exceptionHandler(Exception e) {
+        if (e instanceof AuthenticationException) {
+            log.error("AuthenticationException", e);
+            return ResponseUtils.unauthorized(ErrorResponse.of(HttpStatusCode.UNAUTHORIZED, e.getMessage()));
+        } else if (e instanceof FileNotFoundException) {
+            log.error("FileNotFoundException", e);
+            return ResponseUtils.internalErr(ErrorResponse.of(HttpStatusCode.NO_CONTENT, e.getMessage()));
+        } else if (e instanceof EntityNotFoundException) {
+            log.error("EntityNotFoundException", e);
+            return ResponseUtils.internalErr(ErrorResponse.of(HttpStatusCode.NO_CONTENT, e.getMessage()));
+        } else {
+            log.error("Exception", e);
+            return ResponseUtils.internalErr(ErrorResponse.of(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage()));
+        }
     }
 }

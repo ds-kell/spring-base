@@ -27,6 +27,6 @@ public class RedisController {
     @DeleteMapping("/revoke")
     public String revokeToken(@RequestParam String token) {
         redisService.revokeToken(token);
-        return "Token đã bị thu hồi";
+        return "Token was revoked";
     }
 }

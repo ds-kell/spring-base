@@ -3,6 +3,7 @@ package vn.com.dsk.demo.base.adapter.wrappers;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+import vn.com.dsk.demo.base.shared.constants.HttpStatusCode;
 
 @Data
 @NoArgsConstructor
@@ -12,14 +13,13 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response {
     @Builder.Default
+    protected HttpStatusCode statusCode = null;
 
-    protected Integer statusCode = 500;
+    protected String message = null;
 
-    protected String message = "success";
+    protected Object data = null;
 
-    protected Object data;
-
-    public static Response of (Integer statusCode, String message, Object data) {
+    public static Response of (HttpStatusCode statusCode, String message, Object data) {
         return Response.builder()
                 .statusCode(statusCode)
                 .message(message)

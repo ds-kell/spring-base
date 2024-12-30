@@ -32,7 +32,7 @@ public class AuthController {
 
     @PostMapping("public/auth/login")
     public ResponseEntity<Response> authenticateAccount(@Valid @RequestBody LoginRequest loginRequest) {
-        return loginUseCase.execute(loginRequest);
+        return ResponseUtils.ok(loginUseCase.execute(loginRequest));
     }
 
     @PostMapping("public/auth/pre-register")
