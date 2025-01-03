@@ -47,7 +47,7 @@ public class AuthController {
 
     @PostMapping("public/auth/verify-otp")
     public ResponseEntity<Response> verifySignUp(@Valid @RequestParam  String OTP) {
-        return ResponseUtils.ok(authService.verifySignUp(OTP));
+        return ResponseUtils.ok(authService.verifyRegister(OTP));
     }
 
     @GetMapping("private/auth/refresh-token")

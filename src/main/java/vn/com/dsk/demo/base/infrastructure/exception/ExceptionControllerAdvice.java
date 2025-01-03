@@ -2,6 +2,7 @@ package vn.com.dsk.demo.base.infrastructure.exception;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,6 +29,9 @@ public class ExceptionControllerAdvice {
         } else if (e instanceof EntityNotFoundException) {
             log.error("EntityNotFoundException", e);
             return ResponseUtils.internalErr(ErrorResponse.of(HttpStatusCode.NO_CONTENT, e.getMessage()));
+        } else if (e instanceof DataAccessException) {
+            log.error("DataAccessException", e);
+            return ResponseUtils.internalErr(ErrorResponse.of(HttpStatusCode.BAD_REQUEST, e.getMessage()));
         } else {
             log.error("Exception", e);
             return ResponseUtils.internalErr(ErrorResponse.of(HttpStatusCode.INTERNAL_SERVER_ERROR, e.getMessage()));

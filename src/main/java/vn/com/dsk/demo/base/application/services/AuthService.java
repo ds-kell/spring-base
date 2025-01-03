@@ -3,11 +3,9 @@ package vn.com.dsk.demo.base.application.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import vn.com.dsk.demo.base.adapter.dto.request.*;
 import vn.com.dsk.demo.base.adapter.dto.response.JwtResponse;
-import vn.com.dsk.demo.base.adapter.wrappers.Response;
-import vn.com.dsk.demo.base.adapter.wrappers.ResponseUtils;
 import vn.com.dsk.demo.base.infrastructure.exception.EntityNotFoundException;
 import vn.com.dsk.demo.base.infrastructure.exception.ServiceException;
 import vn.com.dsk.demo.base.domain.entities.Account;
@@ -78,7 +74,7 @@ public class AuthService {
         }
     }
 
-    public Object verifySignUp(String OTP) {
+    public Object verifyRegister(String OTP) {
         RegisterInfo registerInfo = redisService.getRegisterInfoByToken(OTP);
         if (registerInfo != null) {
             Account user = new Account();
